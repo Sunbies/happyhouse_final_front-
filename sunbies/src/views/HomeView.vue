@@ -1,18 +1,18 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <!-- <topside-navbar-vue></topside-navbar-vue> -->
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+// import HelloWorld from "@/components/HelloWorld.vue";
+// import TopsideNavbarVue from "@/components/TopsideNavbar.vue";
 
 export default {
   name: "HomeView",
   components: {
-    HelloWorld,
+    // TopsideNavbarVue,
   },
 };
 </script>

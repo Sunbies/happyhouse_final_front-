@@ -1,12 +1,25 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
+    <topside-navbar-vue></topside-navbar-vue>
+    <!-- <left-side-bar-vue></left-side-bar-vue>
+     -->
+    <!-- <nav-sidebarvue></nav-sidebarvue> -->
     <router-view />
   </div>
 </template>
+<script>
+import TopsideNavbarVue from "@/components/template/TopsideNavbar.vue";
+// import LeftSideBarVue from "@/components/Template/LeftSideBar.vue";
+// import NavSidebarvue from "@/components/template/NavSidebar.vue";
+export default {
+  name: "HomeView",
+  components: {
+    TopsideNavbarVue,
+    // LeftSideBarVue,
+    // NavSidebarvue,
+  },
+};
+</script>
 
 <style>
 #app {
