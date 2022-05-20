@@ -33,6 +33,11 @@ const routes = [
         component: () => import("@/components/user/UserInfo.vue"),
       },
       {
+        path: "userPasswordCheck",
+        name: "userPasswordCheck",
+        component: () => import("@/components/user/UserPasswordCheck.vue"),
+      },
+      {
         path: "findpassword",
         name: "findpassword",
         component: () => import("@/components/user/UserFindPassword.vue"),

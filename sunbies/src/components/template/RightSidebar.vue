@@ -24,13 +24,13 @@
           ></b-icon-x-square>
         </a>
         <b-navbar>
-          <h3>
+          <h5>
             <img
               style="margin-right: 10px; height: 40px"
               src="@/assets/user.svg"
               alt="Happy House"
-            />dladndrbs
-          </h3>
+            />손님
+          </h5>
         </b-navbar>
       </div>
       <!-- <div style="background-color: darkblue">
@@ -49,19 +49,58 @@
               accordion="mypage-accordion"
               role="tabpanel"
             >
-              <b-card-body class="mx-auto" style="padding: 0%; width: 78%">
+              <b-card-body
+                v-if="!isLogin"
+                class="mx-auto"
+                style="padding: 0%; width: 78%"
+              >
                 <b-card no-body>
-                  <b-button block variant="info">로그인</b-button>
+                  <b-button :to="{ name: 'login' }" block variant="info"
+                    >로그인</b-button
+                  >
                 </b-card>
               </b-card-body>
-              <b-card-body class="mx-auto" style="padding: 0%; width: 78%">
+              <b-card-body
+                v-if="isLogin"
+                class="mx-auto"
+                style="padding: 0%; width: 78%"
+              >
+                <b-card no-body>
+                  <b-button @click.prevent="onClickLogout" block variant="info"
+                    >로그아웃</b-button
+                  >
+                </b-card>
+              </b-card-body>
+              <b-card-body
+                v-if="!isLogin"
+                class="mx-auto"
+                style="padding: 0%; width: 78%"
+              >
                 <b-card no-body>
                   <b-button block variant="info">회원가입</b-button>
                 </b-card>
               </b-card-body>
-              <b-card-body class="mx-auto" style="padding: 0%; width: 78%">
+              <b-card-body
+                v-if="!isLogin"
+                class="mx-auto"
+                style="padding: 0%; width: 78%"
+              >
                 <b-card no-body>
                   <b-button block variant="info">비밀번호 찾기</b-button>
+                </b-card>
+              </b-card-body>
+              <b-card-body
+                v-if="isLogin"
+                class="mx-auto"
+                style="padding: 0%; width: 78%"
+              >
+                <b-card no-body>
+                  <b-button
+                    :to="{ name: 'userPasswordCheck' }"
+                    block
+                    variant="info"
+                    >회원정보</b-button
+                  >
                 </b-card>
               </b-card-body>
             </b-collapse>
@@ -210,7 +249,33 @@
 </template>
 
 <script>
-export default {};
+import { mapState, mapMutations, mapActions } from "vuex";
+// import ms from "@/store/modules/memberStore";
+
+const memberStore = "memberStore";
+export default {
+  computed: {
+    ...mapState(memberStore, ["isLogin", "userInfo"]),
+  },
+  methods: {
+    ...mapActions(["userLogout"]),
+    ...mapMutations(memberStore, ["SET_IS_LOGIN", "SET_USER_INFO"]),
+    onClickLogout() {
+      // console.log("memberStore : ", ms);
+      this.SET_USER_INFO(null);
+      // console.log("로그아웃 들어옴");
+      // this.$store.commit("memberStore/SET_IS_LOGIN", false);
+      // this.$store.commit("memberStore/SET_USER_INFO", null);
+      sessionStorage.removeItem("access-token");
+      // 저 위에있으니까 이 값이 바뀌지 않았음. 하여 이렇게 체크해줌
+      this.SET_IS_LOGIN(false);
+      alert("로그아웃되었습니다.");
+      if (this.$route.path != "/") {
+        this.$router.push({ name: "home" });
+      }
+    },
+  },
+};
 </script>
 
 <style></style>

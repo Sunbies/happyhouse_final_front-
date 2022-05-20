@@ -7,7 +7,7 @@
     </b-row>
     <b-row>
       <b-col></b-col>
-      <b-col cols="8">
+      <b-col cols="7">
         <b-card class="text-center mt-3" style="max-width: 40rem" align="left">
           <b-form class="text-left">
             <b-alert show variant="danger" v-if="isLoginError"
@@ -16,7 +16,7 @@
             <b-form-group label="아이디:" label-for="userid">
               <b-form-input
                 id="userid"
-                v-model="user.id"
+                v-model="user.userid"
                 required
                 placeholder="아이디 입력...."
                 @keyup.enter="confirm"
@@ -26,7 +26,7 @@
               <b-form-input
                 type="password"
                 id="userpwd"
-                v-model="user.pw"
+                v-model="user.userpwd"
                 required
                 placeholder="비밀번호 입력...."
                 @keyup.enter="confirm"
@@ -55,31 +55,36 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
+
+const memberStore = "memberStore";
+
 export default {
-  name: "UserLogin",
+  name: "MemberLogin",
   data() {
     return {
-      isLoginError: false,
       user: {
-        id: "",
-        pw: "",
+        userid: null,
+        userpwd: null,
       },
     };
   },
+  computed: {
+    ...mapState(memberStore, ["isLogin", "isLoginError"]),
+  },
   methods: {
-    ...mapActions(["loginUser"]),
+    ...mapActions(memberStore, ["userConfirm", "getUserInfo"]),
     async confirm() {
       const data = {
-        id: this.user.id,
-        pw: this.user.pw,
+        id: this.user.userid,
+        password: this.user.userpwd,
       };
-      await this.loginUser(data);
-      if (this.$store.state.user) {
-        alert(`${this.$store.state.user.id}님이 로그인하셨습니다.`);
+      await this.userConfirm(data);
+      let token = sessionStorage.getItem("access-token");
+      if (this.isLogin) {
+        await this.getUserInfo(token);
+        alert("로그인되었습니다");
         this.$router.push({ name: "home" });
-      } else {
-        alert("로그인에 실패하였습니다.");
       }
     },
     movePage() {
