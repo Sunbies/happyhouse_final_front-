@@ -127,22 +127,39 @@
             >
               <b-card-body class="mx-auto" style="padding: 0%; width: 78%">
                 <b-card no-body>
-                  <b-button block variant="info">공지사항</b-button>
+                  <b-button :to="{ name: 'noticeboard' }" block variant="info"
+                    >공지사항</b-button
+                  >
                 </b-card>
               </b-card-body>
               <b-card-body class="mx-auto" style="padding: 0%; width: 78%">
                 <b-card no-body>
-                  <b-button block variant="info">부동산 게시판</b-button>
+                  <b-button
+                    :to="{
+                      name: 'generalboard',
+                      params: {
+                        boardname: 'qna',
+                      },
+                    }"
+                    block
+                    variant="info"
+                    >Q&amp;A 게시판</b-button
+                  >
                 </b-card>
               </b-card-body>
               <b-card-body class="mx-auto" style="padding: 0%; width: 78%">
                 <b-card no-body>
-                  <b-button block variant="info">제테크 게시판</b-button>
-                </b-card>
-              </b-card-body>
-              <b-card-body class="mx-auto" style="padding: 0%; width: 78%">
-                <b-card no-body>
-                  <b-button block variant="info">자유 게시판</b-button>
+                  <b-button
+                    :to="{
+                      name: 'generalboard',
+                      params: {
+                        boardname: 'realestate',
+                      },
+                    }"
+                    block
+                    variant="info"
+                    >부동산 게시판</b-button
+                  >
                 </b-card>
               </b-card-body>
             </b-collapse>

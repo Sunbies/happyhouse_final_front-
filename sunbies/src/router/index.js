@@ -42,6 +42,24 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/board",
+    name: "board",
+    redirect: "/board/realestate",
+    component: () => import("@/views/BoardView.vue"),
+    children: [
+      {
+        path: "notice",
+        name: "noticeboard",
+        component: () => import("@/components/board/NoticeBoard.vue"),
+      },
+      {
+        path: ":boardname",
+        name: "generalboard",
+        component: () => import("@/components/board/GeneralBoard.vue"),
+      },
+    ],
+  },
 ];
 
 const router = new VueRouter({

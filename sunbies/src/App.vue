@@ -21,11 +21,34 @@ export default {
 </script>
 
 <style>
+@font-face {
+  font-family: "SunbiesSans";
+  src: url("@/assets/fonts/noto-sans-kr-v27-latin_korean-500.woff")
+    format("woff");
+  font-weight: normal;
+}
+@font-face {
+  font-family: "SunbiesSans";
+  src: url("@/assets/fonts/noto-sans-kr-v27-latin_korean-900.woff")
+    format("woff");
+  font-weight: bold;
+}
+@font-face {
+  font-family: "SunbiesSans";
+  src: url("@/assets/fonts/roboto-v30-latin-500.woff") format("woff");
+  unicode-range: U+0020-007E;
+  font-weight: normal;
+}
+@font-face {
+  font-family: "SunbiesSans";
+  src: url("@/assets/fonts/roboto-v30-latin-900.woff") format("woff");
+  unicode-range: U+0020-007E;
+  font-weight: bold;
+}
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "SunbiesSans", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
 }
 </style>
