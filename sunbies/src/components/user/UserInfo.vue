@@ -68,6 +68,7 @@
     </b-container>
     <!--================================ 유저 정보 수정 ================================-->
     <b-container v-else>
+      <a>유효성 검사는 됐는데 실패시에도 서밋하는문제있음</a>
       <b-col class="d-flex justify-content-center">
         <b-card class="text-center mt-3" style="width: 40rem" align="left">
           <b-form class="text-left" @submit.stop.prevent="confirm">
@@ -113,7 +114,7 @@
                   min: 3,
                   max: 20,
                   alpha_num: true,
-                  is: firstPassword,
+                  confirmed: firstPassword,
                 }"
                 :state="validateState('새 비밀번호 확인')"
                 aria-describedby="새 비밀번호 확인-invalid-feedback"
@@ -130,10 +131,7 @@
                 id="userName"
                 name="이름"
                 v-model="user.name"
-                v-validate="{
-                  required: true,
-                  is: firstPassword,
-                }"
+                v-validate="'required'"
                 :state="validateState('이름')"
                 aria-describedby="이름-invalid-feedback"
                 required
@@ -177,17 +175,7 @@
 // import http from "@/util/rest-http-common";
 import { mapActions, mapGetters } from "vuex";
 import { Validator } from "vee-validate";
-// import VeeValidate from 'vee-validate';
-// Vue.use(VeeValidate, { inject: false });
-// VeeValidate.Validator.extend('mobile', {
-//     getMessage: field => `The number is not valid for Bangladesh.`,
-//     validate: value => {
-//         var strongRegex = new RegExp("^(8801[756891]{1}[0-9]{8}|01[756891]{1}[0-9]{8})$");
-//         if(value=='') return true;
-//         return strongRegex.test(value);
-//     }
-// });
-
+// https://vuejs-kr.github.io/vue/vee-validate/2017/04/01/using-vee-validate/
 const memberStore = "memberStore";
 export default {
   name: "UserInfo",
@@ -206,6 +194,7 @@ export default {
     //     return regPhone.test(value);
     //   },
     // });
+    // 전화번호 양식과 동일한지 확인하는 유효성검사
     Validator.extend("phoneStyleRule", {
       getMessage: function (field, args) {
         console.log("field=" + field + ", args=" + args);
@@ -215,6 +204,20 @@ export default {
       validate: function (value, args) {
         // 체크 로직
         const regPhone = /^01([0|1|6|7|8|9])-([0-9]{3,4})-([0-9]{4})$/;
+        console.log("value=" + value + ", args=" + args);
+        return regPhone.test(value);
+      },
+    });
+
+    // 이름을 위해 한글 또는 영어로 입력됐는지 확인하는 유효성검사
+    Validator.extendI("nameStyleRule", {
+      getMessage: function (field, args) {
+        console.log("field=" + field + ", args=" + args);
+        return "이름은 한글 또는 영문으로 입력되어야 합니다.";
+      },
+      validate: function (value, args) {
+        // 체크 로직
+        const regPhone = /^[가-힣|aA-zZ]*$/;
         console.log("value=" + value + ", args=" + args);
         return regPhone.test(value);
       },
@@ -233,6 +236,7 @@ export default {
   //     ...mapActions('module1', [ 'method1', 'method2' ]),
   //     ...mapActions('module2', { mod2method1: 'method1', mod2method2: 'method2' })
   // }
+  computed() {},
 
   methods: {
     ...mapGetters(memberStore, ["checkUserInfo"]),
@@ -257,6 +261,7 @@ export default {
         name: this.user.name,
         phone: this.user.phone,
       };
+      console.log(this.errors.any());
       await this.userInfoUpdate(newUser).then(() => {
         alert("회원정보 수정완료");
         this.$router.push({ name: "home" });

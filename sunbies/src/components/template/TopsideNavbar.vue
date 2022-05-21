@@ -9,7 +9,7 @@
       src="@/assets/home.svg"
       alt="Happy House"
     />
-    <router-link :to="{ name: '/' }" class="navbar-brand"
+    <router-link :to="{ name: 'home' }" class="navbar-brand"
       ><h2>Happy House</h2></router-link
     >
 

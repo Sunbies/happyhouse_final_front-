@@ -30,6 +30,7 @@ const memberStore = {
     },
   },
   actions: {
+    // 유저 로그인
     async userConfirm({ commit }, user) {
       await login(
         user,
@@ -47,6 +48,7 @@ const memberStore = {
         () => {}
       );
     },
+
     // 유저 정보 업데이트
     async userInfoUpdate({ commit }, user) {
       // console.log("스토어 userInfoUpdate안에 들어온 user");

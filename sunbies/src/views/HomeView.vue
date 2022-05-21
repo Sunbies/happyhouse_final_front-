@@ -1,18 +1,28 @@
 <template>
   <div class="home">
-    <!-- <topside-navbar-vue></topside-navbar-vue> -->
+    <home-jumbotron-vue></home-jumbotron-vue>
+    <div
+      class="d-flex justify-content-center"
+      style="background-color: goldenrod"
+    >
+      <div style="width: 70%">
+        <deal-display-vue></deal-display-vue>
+        <comunity-display-vue></comunity-display-vue>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-// import HelloWorld from "@/components/HelloWorld.vue";
-// import TopsideNavbarVue from "@/components/TopsideNavbar.vue";
-
+import HomeJumbotronVue from "@/components/home/HomeJumbotron.vue";
+import DealDisplayVue from "@/components/home/DealDisplay.vue";
+import ComunityDisplayVue from "@/components/home/ComunityDisplay.vue";
 export default {
   name: "HomeView",
   components: {
-    // TopsideNavbarVue,
+    HomeJumbotronVue,
+    DealDisplayVue,
+    ComunityDisplayVue,
   },
 };
 </script>

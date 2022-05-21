@@ -17,15 +17,13 @@
                 v-model="password"
                 v-validate="{
                   required: true,
-                  min: 3,
-                  max: 20,
-                  alpha_num: true,
                 }"
                 :state="validateState('비밀번호')"
                 aria-describedby="passwordInput-invalid-feedback"
                 required
                 placeholder="비밀번호 입력...."
               ></b-form-input>
+              <!-- 이건 임풋이 끝날때마다 해주면된다. -->
               <b-form-invalid-feedback id="passwordInput-invalid-feedback">{{
                 veeErrors.first("비밀번호")
               }}</b-form-invalid-feedback>
