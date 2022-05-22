@@ -46,8 +46,19 @@ export default {
   font-weight: bold;
 }
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-size: 16px;
+}
+
 #app {
-  font-family: "SunbiesSans", Helvetica, Arial, sans-serif;
+  font-family: "SunbiesSans", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

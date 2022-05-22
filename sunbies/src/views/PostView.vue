@@ -1,11 +1,11 @@
 <template>
   <b-container>
-    <router-view :key="$route.fullPath" />
+    <router-view />
   </b-container>
 </template>
 
 <script>
 export default {
-  name: "BoardView",
+  name: "PostView",
 };
 </script>

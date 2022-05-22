@@ -49,14 +49,31 @@ const routes = [
     component: () => import("@/views/BoardView.vue"),
     children: [
       {
-        path: "notice",
-        name: "noticeboard",
-        component: () => import("@/components/board/NoticeBoard.vue"),
-      },
-      {
         path: ":boardname",
         name: "generalboard",
         component: () => import("@/components/board/GeneralBoard.vue"),
+      },
+      {
+        path: ":boardname/write",
+        name: "postwrite",
+        component: () => import("@/components/board/PostWrite.vue"),
+      },
+    ],
+  },
+  {
+    path: "/post",
+    name: "post",
+    component: () => import("@/views/PostView.vue"),
+    children: [
+      {
+        path: ":postno",
+        name: "postdetail",
+        component: () => import("@/components/board/PostDetail.vue"),
+      },
+      {
+        path: ":postno/modify",
+        name: "postmodify",
+        component: () => import("@/components/board/PostModify.vue"),
       },
     ],
   },
