@@ -50,6 +50,11 @@
             </div>
           </b-button>
         </div>
+
+        <!-- 페이징 컴포넌트 -->
+        <div v-if="currentPageNo" class="d-flex justify-content-center">
+          <deal-page-nav />
+        </div>
       </b-col>
       <!-- 여기에 디테일 뷰 보여야함 -->
       <b-col cols="7">
@@ -217,7 +222,9 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapGetters, mapMutations } from "vuex";
+import DealPageNav from "@/components/deal/DealPageNav.vue";
+
 const houseStore = "houseStore";
 
 export default {
@@ -256,8 +263,12 @@ export default {
       },
     };
   },
+  components: {
+    DealPageNav,
+  },
   computed: {
     ...mapState(houseStore, ["sidos", "guguns", "dongs", "houses", "house"]),
+    ...mapGetters(houseStore, ["currentPageNo"]),
   },
   watch: {
     houses() {
@@ -266,12 +277,12 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(
-      houseStore,
+    ...mapMutations(houseStore, [
       "CLEAR_HOUSE_LIST",
       "SET_DETAIL_HOUSE",
-      "CLEAR_DETAIL_HOUSE"
-    ),
+      "CLEAR_DETAIL_HOUSE",
+      "CLEAR_PAGE_NAV",
+    ]),
     setHouse(house) {
       this.houseInfo = house;
       //   alert(JSON.stringify(this.houseInfo));
@@ -286,6 +297,7 @@ export default {
   },
   destroyed() {
     this.CLEAR_DETAIL_HOUSE();
+    this.CLEAR_PAGE_NAV();
   },
 };
 </script>

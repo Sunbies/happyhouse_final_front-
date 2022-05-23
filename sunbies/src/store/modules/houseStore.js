@@ -8,9 +8,30 @@ const houseStore = {
     dongs: [{ value: null, text: "선택하세요" }],
     houses: [],
     house: null,
+
+    pageNav: {},
   },
 
-  getters: {},
+  getters: {
+    currentPageNo(state) {
+      return state.pageNav.currentPageNo;
+    },
+    startPageNo(state) {
+      return state.pageNav.startPageNo;
+    },
+    endPageNo(state) {
+      return state.pageNav.endPageNo;
+    },
+    headRange(state) {
+      return state.pageNav.headRange;
+    },
+    tailRange(state) {
+      return state.pageNav.tailRange;
+    },
+    totalPageCount(state) {
+      return state.pageNav.totalPageCount;
+    },
+  },
 
   mutations: {
     SET_SIDO_LIST: (state, sidos) => {
@@ -50,6 +71,13 @@ const houseStore = {
     },
     CLEAR_DETAIL_HOUSE: (state) => {
       state.house = null;
+    },
+
+    SET_PAGE_NAV: (state, pageNav) => {
+      state.pageNav = pageNav;
+    },
+    CLEAR_PAGE_NAV: (state) => {
+      state.pageNav = {};
     },
   },
 
@@ -95,18 +123,16 @@ const houseStore = {
         }
       );
     },
-    getHouseList: ({ commit }, dongCode) => {
+    getHouseList: ({ commit }, sParams) => {
       // vue cli enviroment variables 검색
       //.env.local file 생성.
       // 반드시 VUE_APP으로 시작해야 한다.
-      const params = {
-        dongCode: dongCode,
-      };
       houseList(
-        params,
+        sParams,
         (response) => {
           console.log(response.data.infoList);
           commit("SET_HOUSE_LIST", response.data.infoList);
+          commit("SET_PAGE_NAV", response.data.pageNav);
         },
         (error) => {
           console.log(error);
