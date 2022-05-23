@@ -82,7 +82,7 @@ export default {
       { value: "likeCount", text: "좋아요" },
       { value: "replyCount", text: "댓글" },
     ],
-    orderSelected: "asc",
+    orderSelected: "desc",
     orderOptions: [
       { value: "asc", text: "오름차순" },
       { value: "desc", text: "내림차순" },
@@ -164,7 +164,7 @@ export default {
       },
     });
     this.orderBySelected = this.$route.query.orderby ?? null;
-    this.orderSelected = this.$route.query.order ?? "asc";
+    this.orderSelected = this.$route.query.order ?? "desc";
     this.searchKeySelected = this.$route.query.key ?? null;
     this.searchWord = this.$route.query.word ?? "";
   },
