@@ -9,6 +9,7 @@ const routes = [
     name: "home",
     component: () => import("@/views/HomeView.vue"),
   },
+  // user관련
   {
     path: "/user",
     name: "user",
@@ -39,6 +40,27 @@ const routes = [
         path: "findpassword",
         name: "findpassword",
         component: () => import("@/components/user/UserFindPassword.vue"),
+      },
+    ],
+  },
+  // 실거래가 조회 관련
+  {
+    path: "/deal",
+    name: "deal",
+    redirect: "/deal/searchDeal",
+    component: () => import("@/views/DealView.vue"),
+    children: [
+      // 실거래가 조회
+      {
+        path: "searchDeal",
+        name: "searchDeal",
+        component: () => import("@/components/deal/DealPage.vue"),
+      },
+      // 즐겨찾기
+      {
+        path: "FavoriteApt",
+        name: "FavoriteApt",
+        component: () => import("@/components/deal/FavoriteApt.vue"),
       },
     ],
   },

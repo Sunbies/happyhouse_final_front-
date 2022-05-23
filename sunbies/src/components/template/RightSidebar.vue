@@ -52,8 +52,9 @@
             </b-card-header>
             <b-collapse
               id="mypage-collapse"
-              accordion="mypage-accordion"
+              accordion="sidebar-accordion"
               role="tabpanel"
+              visible
             >
               <b-card-body
                 v-if="!isLogin"
@@ -122,7 +123,7 @@
             </b-card-header>
             <b-collapse
               id="commynity-collapse"
-              accordion="commynity-accordion"
+              accordion="sidebar-accordion"
               role="tabpanel"
             >
               <b-card-body class="mx-auto" style="padding: 0%; width: 78%">
@@ -156,12 +157,14 @@
             </b-card-header>
             <b-collapse
               id="deal-collapse"
-              accordion="deal-accordion"
+              accordion="sidebar-accordion"
               role="tabpanel"
             >
               <b-card-body class="mx-auto" style="padding: 0%; width: 78%">
                 <b-card no-body>
-                  <b-button block variant="info">실거래가 조회</b-button>
+                  <b-button :to="{ name: 'searchDeal' }" block variant="info"
+                    >실거래가 조회</b-button
+                  >
                 </b-card>
               </b-card-body>
               <b-card-body class="mx-auto" style="padding: 0%; width: 78%">
