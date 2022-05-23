@@ -7,13 +7,16 @@ Vue.use(Vuex);
 import memberStore from "@/store/modules/memberStore.js";
 // import boardStore from "@/store/modules/boardStore.js";
 import houseStore from "@/store/modules/houseStore.js";
+import boardStore from "@/store/modules/boardStore.js";
+// import houseStore from "@/store/modules/houseStore.js";
 // import todoStore from "@/store/modules/todoStore.js";
 
 const store = new Vuex.Store({
   modules: {
     memberStore,
-    // boardStore,
     houseStore,
+    boardStore,
+    // houseStore,
     // todoStore,
   },
   plugins: [

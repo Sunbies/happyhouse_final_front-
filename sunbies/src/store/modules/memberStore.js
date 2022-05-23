@@ -13,6 +13,18 @@ const memberStore = {
     checkUserInfo: function (state) {
       return state.userInfo;
     },
+    userLevel(state) {
+      if (state.userInfo == null) return -1;
+      return state.userInfo.isadmin;
+    },
+    userId(state) {
+      if (state.userInfo == null) return "";
+      return state.userInfo.id;
+    },
+    userName(state) {
+      if (state.userInfo == null) return "";
+      return state.userInfo.name;
+    },
   },
   mutations: {
     SET_IS_LOGIN: (state, isLogin) => {

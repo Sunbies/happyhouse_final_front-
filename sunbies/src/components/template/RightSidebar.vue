@@ -7,7 +7,7 @@
       right
       no-header
       bg-variant="secondary"
-      backdrop="true"
+      :backdrop="true"
       shadow
     >
       <div style="background-color: #f6f6f6">
@@ -128,22 +128,59 @@
             >
               <b-card-body class="mx-auto" style="padding: 0%; width: 78%">
                 <b-card no-body>
-                  <b-button block variant="info">공지사항</b-button>
+                  <b-button
+                    :to="{
+                      name: 'generalboard',
+                      params: {
+                        boardname: 'notice',
+                      },
+                      query: {
+                        pg: 1,
+                        cpp: 10,
+                      },
+                    }"
+                    block
+                    variant="info"
+                    >공지사항</b-button
+                  >
                 </b-card>
               </b-card-body>
               <b-card-body class="mx-auto" style="padding: 0%; width: 78%">
                 <b-card no-body>
-                  <b-button block variant="info">부동산 게시판</b-button>
+                  <b-button
+                    :to="{
+                      name: 'generalboard',
+                      params: {
+                        boardname: 'qna',
+                      },
+                      query: {
+                        pg: 1,
+                        cpp: 10,
+                      },
+                    }"
+                    block
+                    variant="info"
+                    >Q&amp;A 게시판</b-button
+                  >
                 </b-card>
               </b-card-body>
               <b-card-body class="mx-auto" style="padding: 0%; width: 78%">
                 <b-card no-body>
-                  <b-button block variant="info">제테크 게시판</b-button>
-                </b-card>
-              </b-card-body>
-              <b-card-body class="mx-auto" style="padding: 0%; width: 78%">
-                <b-card no-body>
-                  <b-button block variant="info">자유 게시판</b-button>
+                  <b-button
+                    :to="{
+                      name: 'generalboard',
+                      params: {
+                        boardname: 'realestate',
+                      },
+                      query: {
+                        pg: 1,
+                        cpp: 10,
+                      },
+                    }"
+                    block
+                    variant="info"
+                    >부동산 게시판</b-button
+                  >
                 </b-card>
               </b-card-body>
             </b-collapse>

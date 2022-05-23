@@ -44,6 +44,7 @@ const routes = [
     ],
   },
   // 실거래가 조회 관련
+
   {
     path: "/deal",
     name: "deal",
@@ -61,6 +62,43 @@ const routes = [
         path: "FavoriteApt",
         name: "FavoriteApt",
         component: () => import("@/components/deal/FavoriteApt.vue"),
+      },
+    ],
+  },
+  // 보드 관련
+  {
+    path: "/board",
+    name: "board",
+    redirect: "/board/realestate",
+    component: () => import("@/views/BoardView.vue"),
+    children: [
+      {
+        path: ":boardname",
+        name: "generalboard",
+        component: () => import("@/components/board/GeneralBoard.vue"),
+      },
+      {
+        path: ":boardname/write",
+        name: "postwrite",
+        component: () => import("@/components/board/PostWrite.vue"),
+      },
+    ],
+  },
+  // 게시물
+  {
+    path: "/post",
+    name: "post",
+    component: () => import("@/views/PostView.vue"),
+    children: [
+      {
+        path: ":postno",
+        name: "postdetail",
+        component: () => import("@/components/board/PostDetail.vue"),
+      },
+      {
+        path: ":postno/modify",
+        name: "postmodify",
+        component: () => import("@/components/board/PostModify.vue"),
       },
     ],
   },
