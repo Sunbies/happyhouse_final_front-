@@ -109,8 +109,8 @@ export default {
     }
     this.CLEAR_HOUSE_LIST();
     this.CLEAR_SIDO_LIST();
-    // this.CLEAR_GUGUN_LIST();
-    // this.CLEAR_DONG_LIST();
+    this.CLEAR_GUGUN_LIST();
+    this.CLEAR_DONG_LIST();
     this.getSido();
   },
   methods: {
@@ -125,6 +125,8 @@ export default {
       "CLEAR_GUGUN_LIST",
       "CLEAR_DONG_LIST",
       "CLEAR_HOUSE_LIST",
+      "CLEAR_DETAIL_HOUSE",
+      "CLEAR_DETAIL_HOUSE",
     ]),
     gugunList() {
       console.log("구군리스트 실행");

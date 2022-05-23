@@ -3,11 +3,47 @@ import { sidoList, gugunList, dongList, houseList } from "@/api/house.js";
 const houseStore = {
   namespaced: true,
   state: {
+    // 검색과 검색결과 관련
     sidos: [{ value: null, text: "선택하세요" }],
     guguns: [{ value: null, text: "선택하세요" }],
     dongs: [{ value: null, text: "선택하세요" }],
     houses: [],
     house: null,
+    // 카카오맵 관련
+    positions: [],
+
+    bounds: null,
+    categoryList: {
+      // 대형마트
+      MT1: [],
+      // 어린이집, 유치원
+      PS3: [],
+      // 학원
+      AC5: [],
+      // 은행
+      BK9: [],
+      // 관광명소
+      AT4: [],
+      // 음식점
+      FD6: [],
+      // 병원
+      HP8: [],
+      // 약국
+      PM9: [],
+      // 편의점
+      CS2: [],
+      // 학교
+      SC4: [],
+      // 자히철역
+      SW8: [],
+      // 문화시설
+      CT1: [],
+      // 공공기관
+      PO3: [],
+      // 카페
+      CE7: [],
+    },
+    categoryStatus: false,
 
     pageNav: {},
   },
@@ -39,25 +75,28 @@ const houseStore = {
         state.sidos.push({ value: sido.sidoCode, text: sido.sidoName });
       });
     },
+    CLEAR_SIDO_LIST: (state) => {
+      state.sidos = [{ value: null, text: "선택하세요" }];
+    },
+
     SET_GUGUN_LIST: (state, guguns) => {
       guguns.forEach((gugun) => {
         state.guguns.push({ value: gugun.gugunCode, text: gugun.gugunName });
       });
     },
+    CLEAR_GUGUN_LIST: (state) => {
+      state.guguns = [{ value: null, text: "선택하세요" }];
+    },
+
     SET_DONG_LIST: (state, dongs) => {
       dongs.forEach((dong) => {
         state.dongs.push({ value: dong.dongCode, text: dong.dongName });
       });
     },
-    CLEAR_SIDO_LIST: (state) => {
-      state.sidos = [{ value: null, text: "선택하세요" }];
-    },
-    CLEAR_GUGUN_LIST: (state) => {
-      state.guguns = [{ value: null, text: "선택하세요" }];
-    },
     CLEAR_DONG_LIST: (state) => {
       state.dongs = [{ value: null, text: "선택하세요" }];
     },
+
     SET_HOUSE_LIST: (state, houses) => {
       //   console.log(houses);
       state.houses = houses;
@@ -66,6 +105,7 @@ const houseStore = {
       //   console.log(houses);
       state.houses = null;
     },
+
     SET_DETAIL_HOUSE: (state, house) => {
       state.house = house;
     },
@@ -73,6 +113,68 @@ const houseStore = {
       state.house = null;
     },
 
+    SET_POSITIONS: (state, newpositions) => {
+      state.positions = newpositions;
+    },
+    RESET_POSITIONS: (state) => {
+      // if (state.positions.length > 0) {
+      //   state.positions.forEach((marker) => marker.setMap(null));
+      // }
+      state.positions = [];
+    },
+
+    SET_BOUNDS: (state, newBounds) => {
+      state.bounds = newBounds;
+    },
+    CLEAR_BOUNDS: (state) => {
+      state.bounds = null;
+    },
+
+    SET_CATEGORYLIST_SPECITIC(state, newCategoryList) {
+      if (newCategoryList.length > 0) {
+        state.categoryList[newCategoryList[0].category_group_code] =
+          newCategoryList;
+      }
+    },
+    CLEAR_CATEGORYLIST_SPECITIC(state) {
+      state.categoryList = {
+        // 대형마트
+        MT1: [],
+        // 어린이집, 유치원
+        PS3: [],
+        // 학원
+        AC5: [],
+        // 은행
+        BK9: [],
+        // 관광명소
+        AT4: [],
+        // 음식점
+        FD6: [],
+        // 병원
+        HP8: [],
+        // 약국
+        PM9: [],
+        // 편의점
+        CS2: [],
+        // 학교
+        SC4: [],
+        // 자히철역
+        SW8: [],
+        // 문화시설
+        CT1: [],
+        // 공공기관
+        PO3: [],
+        // 카페
+        CE7: [],
+      };
+    },
+
+    SET_CATEGORYSTATUS(state, status) {
+      state.categoryStatus = status;
+    },
+    CLEAR_CATEGORYSTATUS(state) {
+      state.categoryStatus = false;
+    },
     SET_PAGE_NAV: (state, pageNav) => {
       state.pageNav = pageNav;
     },
@@ -80,7 +182,6 @@ const houseStore = {
       state.pageNav = {};
     },
   },
-
   actions: {
     getSido: ({ commit }) => {
       sidoList(

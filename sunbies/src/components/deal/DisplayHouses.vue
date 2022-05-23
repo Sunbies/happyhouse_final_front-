@@ -8,8 +8,8 @@
           <!-- 이거를 클릭 가능한 이쁜애들로 만들어보자 -->
           <!-- 버튼으로 만들어볼까? -->
           <b-button
-            v-for="house in houses"
-            :key="house"
+            v-for="(house, idx) in houses"
+            :key="idx"
             block
             @click="setHouse(house)"
             style="background-color: grey; text-align: left"
@@ -113,7 +113,7 @@
           </b-container> -->
           <!-- 카드로 해야한다. -->
           <b-card
-            v-if="houseInfo"
+            v-if="house"
             img-src="https://littledeep.com/wp-content/uploads/2020/09/apartments-illustration-png-1024x853.png"
             img-alt="Image"
             img-top
@@ -126,14 +126,14 @@
               <b-row>
                 <b-col>
                   <b-alert show variant="dark"
-                    >아파트 이름 : {{ houseInfo.apartmentName }}
+                    >아파트 이름 : {{ house.apartmentName }}
                   </b-alert>
                 </b-col>
               </b-row>
               <b-row>
                 <b-col>
                   <b-alert show variant="secondary"
-                    >준공년도 : {{ houseInfo.buildYear }}년
+                    >준공년도 : {{ house.buildYear }}년
                   </b-alert>
                 </b-col>
               </b-row>
@@ -143,20 +143,20 @@
                     >주소 :
                     {{
                       "주소: " +
-                      houseInfo.sidoName +
+                      house.sidoName +
                       " " +
-                      houseInfo.gugunName +
+                      house.gugunName +
                       " " +
-                      houseInfo.dong +
+                      house.dong +
                       " " +
-                      houseInfo.jibun
+                      house.jibun
                     }}<br />
                     ({{
-                      houseInfo.sidoName +
+                      house.sidoName +
                       " " +
-                      houseInfo.gugunName +
+                      house.gugunName +
                       " " +
-                      houseInfo.roadName
+                      house.roadName
                     }})
                   </b-alert>
                 </b-col>
@@ -166,21 +166,21 @@
               <b-row>
                 <b-col>
                   <b-alert show variant="secondary"
-                    >거래번호 : {{ houseInfo.no }}
+                    >거래번호 : {{ house.no }}
                   </b-alert>
                 </b-col>
               </b-row>
               <b-row>
                 <b-col>
                   <b-alert show variant="dark"
-                    >층수 : {{ houseInfo.floor }}층</b-alert
+                    >층수 : {{ house.floor }}층</b-alert
                   >
                 </b-col>
               </b-row>
               <b-row>
                 <b-col>
                   <b-alert show variant="secondary"
-                    >면적 : {{ houseInfo.area }}㎡</b-alert
+                    >면적 : {{ house.area }}㎡</b-alert
                   >
                 </b-col>
               </b-row>
@@ -189,11 +189,11 @@
                   <b-alert show variant="dark"
                     >거래일시 :
                     {{
-                      houseInfo.dealYear +
+                      house.dealYear +
                       "년 " +
-                      houseInfo.dealMonth +
+                      house.dealMonth +
                       "월 " +
-                      houseInfo.dealDay +
+                      house.dealDay +
                       "일"
                     }}</b-alert
                   >
@@ -202,7 +202,7 @@
               <b-row>
                 <b-col>
                   <b-alert show variant="secondary"
-                    >거래금액 : {{ houseInfo.dealAmount }}원</b-alert
+                    >거래금액 : {{ house.dealAmount }}원</b-alert
                   >
                 </b-col>
               </b-row>
@@ -211,11 +211,37 @@
         </div>
       </b-col>
     </b-row>
-    <b-row>
-      <div style="background-color: grey; width: 100%">
-        <b-card style="max-width: 7em; max-height: 15em">
-          <b-card-text> 12곳 </b-card-text>
-        </b-card>
+    <b-row v-if="categoryStatus == true">
+      <div
+        v-for="(category, idx) in categoryList"
+        :key="idx"
+        style="background-color: #e0e0e0"
+      >
+        <a href="" @click.prevent="" id="cafeDisplay">
+          <b-card
+            style="
+              background-color: #7f7f7f;
+              outline-style: solid;
+              outline-color: white;
+              outline-width: 1px;
+              width: 7em;
+            "
+          >
+            <b-card-img
+              :src="require(`@/assets/${idx}.png`)"
+              alt="cafe"
+              top
+              style="
+                max-width: 5em;
+                background-color: #ffffff;
+                border-radius: 15px;
+              "
+            ></b-card-img>
+            <b-card-text style="color: white">
+              {{ category.length }}
+            </b-card-text>
+          </b-card>
+        </a>
       </div>
     </b-row>
   </b-container>
@@ -230,44 +256,59 @@ const houseStore = "houseStore";
 export default {
   data() {
     return {
+      currCategoy: "",
       houseInfo: null,
-      categoryMarkers: {
-        // 대형마트
-        MT1: [],
-        // 어린이집, 유치원
-        PS3: [],
-        // 학원
-        AC5: [],
-        // 은행
-        BK9: [],
-        // 관광명소
-        AT4: [],
-        // 음식점
-        FD6: [],
-        // 병원
-        HP8: [],
-        // 약국
-        PM9: [],
-        // 편의점
-        CS2: [],
-        // 학교
-        SC4: [],
-        // 자히철역
-        SW8: [],
-        // 문화시설
-        CT1: [],
-        // 공공기관
-        PO3: [],
-        // 카페
-        CE7: [],
-      },
+      // curentCategoryList: {
+      //   // 대형마트
+      //   MT1: [],
+      //   // 어린이집, 유치원
+      //   PS3: [],
+      //   // 학원
+      //   AC5: [],
+      //   // 은행
+      //   BK9: [],
+      //   // 관광명소
+      //   AT4: [],
+      //   // 음식점
+      //   FD6: [],
+      //   // 병원
+      //   HP8: [],
+      //   // 약국
+      //   PM9: [],
+      //   // 편의점
+      //   CS2: [],
+      //   // 학교
+      //   SC4: [],
+      //   // 자히철역
+      //   SW8: [],
+      //   // 문화시설
+      //   CT1: [],
+      //   // 공공기관
+      //   PO3: [],
+      //   // 카페
+      //   CE7: [],
+      // },
     };
+  },
+  created() {
+    this.CLEAR_DETAIL_HOUSE();
+    this.CLEAR_HOUSE_LIST();
+    this.CLEAR_CATEGORYLIST_SPECITIC();
+    this.CLEAR_CATEGORYSTATUS();
   },
   components: {
     DealPageNav,
   },
   computed: {
-    ...mapState(houseStore, ["sidos", "guguns", "dongs", "houses", "house"]),
+    ...mapState(houseStore, [
+      "sidos",
+      "guguns",
+      "dongs",
+      "houses",
+      "house",
+      "categoryList",
+      "categoryStatus",
+    ]),
     ...mapGetters(houseStore, ["currentPageNo"]),
   },
   watch: {
@@ -275,21 +316,31 @@ export default {
       console.log("watch가 houses의 변경을 감지~~");
       console.log(this.houses);
     },
+    houseInfo() {
+      console.log("houseInfo 변경됨");
+      // 하우스 인포가 보이는 변수니까
+      // 이때 근처 정보들을 다 저장해야한다.
+      this.searchPlaces();
+      // this.getNearbyPlaceInfo();
+    },
+    categoryStatus() {
+      // alert("categoryStatus = " + this.categoryStatus);
+      if (this.categoryStatus == true) {
+        this.curentCategoryList = this.categoryList;
+      }
+    },
   },
   methods: {
     ...mapMutations(houseStore, [
       "CLEAR_HOUSE_LIST",
       "SET_DETAIL_HOUSE",
       "CLEAR_DETAIL_HOUSE",
+      "CLEAR_CATEGORYLIST_SPECITIC",
+      "CLEAR_CATEGORYSTATUS",
       "CLEAR_PAGE_NAV",
     ]),
     setHouse(house) {
-      this.houseInfo = house;
-      //   alert(JSON.stringify(this.houseInfo));
-      //   alert(JSON.stringify(house));
-      // console.log("listRow : ", this.house);
-      // this.$store.dispatch("getHouse", this.house);
-      //   this.detailHouse(this.house);
+      this.SET_DETAIL_HOUSE(house);
     },
     colorChange(flag) {
       this.isColor = flag;
