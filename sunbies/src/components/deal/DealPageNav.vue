@@ -1,5 +1,5 @@
 <template>
-  <ul class="pagination">
+  <ul class="pagination pagination-sm">
     <li class="page-item">
       <router-link
         :to="{
@@ -10,8 +10,8 @@
           },
         }"
         class="page-link"
-        >최신</router-link
-      >
+        ><b-icon icon="chevron-double-left"
+      /></router-link>
     </li>
     <li class="page-item">
       <router-link
@@ -23,8 +23,8 @@
           },
         }"
         class="page-link"
-        >이전</router-link
-      >
+        ><b-icon icon="chevron-left"
+      /></router-link>
     </li>
 
     <li
@@ -56,8 +56,8 @@
           },
         }"
         class="page-link"
-        >다음</router-link
-      >
+        ><b-icon icon="chevron-right"
+      /></router-link>
     </li>
     <li class="page-item">
       <router-link
@@ -69,8 +69,8 @@
           },
         }"
         class="page-link"
-        >마지막</router-link
-      >
+        ><b-icon icon="chevron-double-right"
+      /></router-link>
     </li>
   </ul>
 </template>
