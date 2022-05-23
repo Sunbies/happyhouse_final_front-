@@ -59,8 +59,8 @@ const routes = [
       },
       // 즐겨찾기
       {
-        path: "FavoriteApt",
-        name: "FavoriteApt",
+        path: "favorite",
+        name: "favorite",
         component: () => import("@/components/deal/FavoriteApt.vue"),
       },
     ],

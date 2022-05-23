@@ -204,9 +204,15 @@
                   >
                 </b-card>
               </b-card-body>
-              <b-card-body class="mx-auto" style="padding: 0%; width: 78%">
+              <b-card-body
+                v-if="userInfo"
+                class="mx-auto"
+                style="padding: 0%; width: 78%"
+              >
                 <b-card no-body>
-                  <b-button block variant="info">즐겨찾기</b-button>
+                  <b-button :to="{ name: 'favorite' }" block variant="info"
+                    >즐겨찾기</b-button
+                  >
                 </b-card>
               </b-card-body>
             </b-collapse>
