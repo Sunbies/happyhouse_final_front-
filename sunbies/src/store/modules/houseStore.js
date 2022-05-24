@@ -1,4 +1,5 @@
 import { sidoList, gugunList, dongList, houseList } from "@/api/house.js";
+import { checkFavorite, countFavorite } from "@/api/favorite.js";
 
 const houseStore = {
   namespaced: true,
@@ -46,6 +47,11 @@ const houseStore = {
     categoryStatus: false,
 
     pageNav: {},
+
+    favoriteHouse: null,
+    fromFavorite: false,
+    userHousePosition: false,
+    houseFavoriteCount: 0,
   },
 
   getters: {
@@ -181,6 +187,19 @@ const houseStore = {
     CLEAR_PAGE_NAV: (state) => {
       state.pageNav = {};
     },
+
+    SET_FAVORITE_HOUSE: (state, house) => {
+      state.favoriteHouse = house;
+    },
+    SET_FROM_FAVORITE: (state, flag) => {
+      state.fromFavorite = flag;
+    },
+    SET_USER_HOUSE_POSITION: (state, position) => {
+      state.userHousePosition = position;
+    },
+    SET_HOUSE_FAVORITE_COUNT: (state, count) => {
+      state.houseFavoriteCount = count;
+    },
   },
   actions: {
     getSido: ({ commit }) => {
@@ -243,6 +262,36 @@ const houseStore = {
     detailHouse: ({ commit }, house) => {
       // 나중에 house.일련번호를 이용하여 API 호출
       commit("SET_DETAIL_HOUSE", house);
+    },
+
+    getHouseFavorite: ({ commit }, { house, id }) => {
+      checkFavorite({
+        id: id,
+        aptCode: house.aptCode,
+      })
+        .then((res) => {
+          if (res.data.message === "success") {
+            console.log(res.data);
+            commit("SET_USER_HOUSE_POSITION", res.data.isFavorite);
+          } else {
+            console.log(res);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      countFavorite(house.aptCode)
+        .then((res) => {
+          if (res.data.message === "success") {
+            console.log(res.data);
+            commit("SET_HOUSE_FAVORITE_COUNT", res.data.favoriteCount);
+          } else {
+            console.log(res);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
   },
 };

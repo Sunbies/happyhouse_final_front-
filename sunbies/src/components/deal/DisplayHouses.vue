@@ -123,6 +123,19 @@
           >
             <b-card-text>
               <h4>아파트 상세정보</h4>
+
+              <div class="text-right">
+                <b-button
+                  @click.prevent="handleUserFavorite(house)"
+                  size="lg"
+                  variant="transparent"
+                >
+                  <b-icon v-if="userHousePosition" icon="star-fill" />
+                  <b-icon v-else icon="star" />
+                  {{ houseFavoriteCount }}
+                </b-button>
+              </div>
+
               <b-row>
                 <b-col>
                   <b-alert show variant="dark"
@@ -248,8 +261,9 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations } from "vuex";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import DealPageNav from "@/components/deal/DealPageNav.vue";
+import { insertFavorite, deleteFavorite } from "@/api/favorite.js";
 
 const houseStore = "houseStore";
 
@@ -291,6 +305,20 @@ export default {
     };
   },
   created() {
+    if (this.fromFavorite) {
+      this.SET_FROM_FAVORITE(false);
+      // this.CLEAR_DETAIL_HOUSE();
+      // this.CLEAR_HOUSE_LIST();
+      this.CLEAR_CATEGORYLIST_SPECITIC();
+      this.CLEAR_CATEGORYSTATUS();
+      this.detailHouse(this.favoriteHouse);
+      this.getHouseFavorite({
+        house: this.favoriteHouse,
+        id: this.userId,
+      });
+      return;
+    }
+
     this.CLEAR_DETAIL_HOUSE();
     this.CLEAR_HOUSE_LIST();
     this.CLEAR_CATEGORYLIST_SPECITIC();
@@ -308,8 +336,13 @@ export default {
       "house",
       "categoryList",
       "categoryStatus",
+      "favoriteHouse",
+      "fromFavorite",
+      "userHousePosition",
+      "houseFavoriteCount",
     ]),
     ...mapGetters(houseStore, ["currentPageNo"]),
+    ...mapGetters("memberStore", ["userId"]),
   },
   watch: {
     houses() {
@@ -338,12 +371,62 @@ export default {
       "CLEAR_CATEGORYLIST_SPECITIC",
       "CLEAR_CATEGORYSTATUS",
       "CLEAR_PAGE_NAV",
+      "SET_FROM_FAVORITE",
     ]),
+    ...mapActions("houseStore", ["detailHouse", "getHouseFavorite"]),
     setHouse(house) {
       this.SET_DETAIL_HOUSE(house);
+      this.getHouseFavorite({
+        house: house,
+        id: this.userId,
+      });
     },
     colorChange(flag) {
       this.isColor = flag;
+    },
+
+    handleUserFavorite(house) {
+      if (this.userId === "") {
+        alert("먼저 로그인하세요.");
+        return;
+      }
+      if (this.userHousePosition) {
+        deleteFavorite({
+          id: this.userId,
+          aptCode: house.aptCode,
+        })
+          .then((res) => {
+            if (res.data.message === "success") {
+              this.getHouseFavorite({
+                house: house,
+                id: this.userId,
+              });
+            } else {
+              console.log(res);
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      } else {
+        insertFavorite({
+          id: this.userId,
+          aptCode: house.aptCode,
+        })
+          .then((res) => {
+            if (res.data.message === "success") {
+              this.getHouseFavorite({
+                house: house,
+                id: this.userId,
+              });
+            } else {
+              console.log(res);
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      }
     },
   },
   destroyed() {
