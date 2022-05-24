@@ -257,10 +257,7 @@ export default {
 <style>
 .b-sidebar.b-sidebar-right {
   left: auto;
-  top: 73px;
+  top: 86px;
   right: 0;
-}
-.bg-dark {
-  /* background-color: #343a40 !important; */
 }
 </style>

@@ -4,14 +4,20 @@
     style="background-color: #e0e0e0"
   >
     <!-- Brand/logo -->
-    <img
+    <!-- <img
       style="float: left; margin-right: 10px"
       src="@/assets/home.svg"
       alt="Happy House"
     />
     <router-link :to="{ name: 'home' }" class="navbar-brand"
       ><h2>Happy House</h2></router-link
-    >
+    > -->
+    <router-link :to="{ name: 'home' }" class="navbar-brand"
+      ><img
+        style="float: left; margin-right: 10px; height: 3em"
+        src="@/assets/sunbis.png"
+        alt="Happy House"
+    /></router-link>
 
     <!-- Links -->
     <div

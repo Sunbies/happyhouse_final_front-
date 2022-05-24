@@ -17,6 +17,9 @@ export default {
     return {
       map: null,
       markers: [],
+      contentNode: null,
+      placeOverlay: null,
+      infowindow: null,
     };
   },
   created() {
@@ -114,6 +117,8 @@ export default {
       //지도 객체를 등록합니다.
       //지도 객체는 반응형 관리 대상이 아니므로 initMap에서 선언합니다.
       this.map = new kakao.maps.Map(container, options);
+      this.placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 });
+      this.contentNode = document.createElement("div"); // 커스텀 오버레이의 컨텐츠 엘리먼트 입니다
       console.log("this.map");
       console.log(this.map);
       // this.SET_MAP(new kakao.maps.Map(container, options));
@@ -208,24 +213,75 @@ export default {
       this.makeStoreMarker(selectedCategoryList);
     },
     makeStoreMarker(places) {
+      let tempmarkers = [];
+      console.log(
+        "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^makeStoreMarker에 들어온 places^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
+      );
+      console.log(places);
       for (var i = 0; i < places.length; i++) {
         // 마커를 생성하고 지도에 표시합니다
         var marker = this.addMarker(
-          new kakao.maps.LatLng(places[i].y, places[i].x)
+          new kakao.maps.LatLng(places[i].y, places[i].x),
+          places[i].place_name
         );
-        // 저 위에 order는 번혼데 무슨상관일까
-
+        let position = new kakao.maps.LatLng(places[i].y, places[i].x);
+        tempmarkers.push(position);
+        console.log(
+          "#####################상권 마커설정 반복문에서의 tempmarker#######################################################"
+        );
+        console.log(tempmarkers);
         // 마커와 검색결과 항목을 클릭 했을 때
         // 장소정보를 표출하도록 클릭 이벤트를 등록합니다
-        (function (marker, place) {
-          kakao.maps.event.addListener(marker, "click", function () {
-            this.displayPlaceInfo(place);
+        // 근데 왜 상권정보 버튼을 실행하자마자 이게뜨는거지?
+        // this.infowindow = (function (marker, place) {
+        // this.infowindow = new kakao.maps.InfoWindow({
+        //   map: this.map, // 인포윈도우가 표시될 지도
+        //   position,
+        //   content: `<div style="padding:5px;">${places[i].place_name}</div>`,
+        //   removable: true,
+        // });
+        ((marker, place) => {
+          kakao.maps.event.addListener(marker, "click", () => {
+            this.infowindow = new kakao.maps.InfoWindow({
+              map: this.map, // 인포윈도우가 표시될 지도
+              position,
+              content: `<div style="padding:5px;">${place.place_name}</div>`,
+              removable: true,
+            });
+            // this.infowindow.open(this.map, marker);
+            // console.log(place);
+            // alert(place.place_name);
+            // 여기까진 된다 알림창 뜬다.
+            // 얘가 안된다.
+            //  new kakao.maps.InfoWindow({
+            //   map: this.map, // 인포윈도우가 표시될 지도
+            //   position: new kakao.maps.LatLng(place.x, place.y),
+            //   content: `<div style="padding:5px;">${place.place_name}</div>`,
+            //   removable: true,
+            // });
+            // this.displayPlaceInfo(place);
+            // this.infowindow = new kakao.maps.InfoWindow({
+            //   content: place, // 인포윈도우에 표시할 내용
+            // });
+            // this.infowindow.open(this.map, marker);
           });
         })(marker, places[i]);
         // (함수)(인자)
+
+        console.log(
+          "#####################상권 마커 설정에서의 marker#######################################################"
+        );
+        console.log(tempmarkers);
       }
+      const bounds = tempmarkers.reduce(
+        (bounds, latlng) => bounds.extend(latlng),
+        new kakao.maps.LatLngBounds()
+      );
+      // this.SET_BOUNDS(bounds);
+      this.map.setBounds(bounds);
     },
     // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
+    // addMarker(position, placeName) {
     addMarker(position) {
       var imageSrc =
           "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png", // 마커 이미지 url, 스프라이트 이미지를 씁니다
@@ -239,6 +295,7 @@ export default {
         marker = new kakao.maps.Marker({
           position: position, // 마커의 위치
           image: markerImage,
+          clickable: true, // 마커를 클릭했을때 지도의 클릭이벤트가 발생하지 ㅇ낳도록 함
         });
 
       marker.setMap(this.map); // 지도 위에 마커를 표출합니다
@@ -247,49 +304,57 @@ export default {
       console.log(this.markers);
       return marker;
     },
-    // displayPlaceInfo(place) {
-    //   var content =
-    //     '<div class="placeinfo">' +
-    //     '   <a class="title" href="' +
-    //     place.place_url +
-    //     '" target="_blank" title="' +
-    //     place.place_name +
-    //     '">' +
-    //     place.place_name +
-    //     "</a>";
 
-    //   if (place.road_address_name) {
-    //     content +=
-    //       '    <span title="' +
-    //       place.road_address_name +
-    //       '">' +
-    //       place.road_address_name +
-    //       "</span>" +
-    //       '  <span class="jibun" title="' +
-    //       place.address_name +
-    //       '">(지번 : ' +
-    //       place.address_name +
-    //       ")</span>";
-    //   } else {
-    //     content +=
-    //       '    <span title="' +
-    //       place.address_name +
-    //       '">' +
-    //       place.address_name +
-    //       "</span>";
-    //   }
-
-    //   content +=
-    //     '    <span class="tel">' +
-    //     place.phone +
-    //     "</span>" +
-    //     "</div>" +
-    //     '<div class="after"></div>';
-
-    //   contentNode.innerHTML = content;
-    //   placeOverlay.setPosition(new kakao.maps.LatLng(place.y, place.x));
-    //   placeOverlay.setMap(this.map);
-    // },
+    displayPlaceInfo(place) {
+      alert("displayPlaceInfo 들어왔음");
+      var content =
+        '<div class="placeinfo">' +
+        '   <a class="title" href="' +
+        place.place_url +
+        '" target="_blank" title="' +
+        place.place_name +
+        '">' +
+        place.place_name +
+        "</a>";
+      if (place.road_address_name) {
+        content +=
+          '    <span title="' +
+          place.road_address_name +
+          '">' +
+          place.road_address_name +
+          "</span>" +
+          '  <span class="jibun" title="' +
+          place.address_name +
+          '">(지번 : ' +
+          place.address_name +
+          ")</span>";
+      } else {
+        content +=
+          '    <span title="' +
+          place.address_name +
+          '">' +
+          place.address_name +
+          "</span>";
+      }
+      content +=
+        '    <span class="tel">' +
+        place.phone +
+        "</span>" +
+        "</div>" +
+        '<div class="after"></div>';
+      this.contentNode.innerHTML = content;
+      this.placeOverlay.setPosition(new kakao.maps.LatLng(place.y, place.x));
+      this.placeOverlay.setMap(this.map);
+      console.log(content);
+      this.infowindow.push(
+        new kakao.maps.InfoWindow({
+          map: this.map, // 인포윈도우가 표시될 지도
+          position: new kakao.maps.LatLng(place.x, place.y),
+          content: '<div style="padding:5px;">Hello World!</div>',
+          removable: true,
+        })
+      );
+    },
 
     makeLatLng(markerPositions) {
       // 마커의 위치들을 포지션 배열 안에 넣어준다.
@@ -306,6 +371,11 @@ export default {
       console.log(positions);
 
       // 가운데 위치 찾기
+      console.log(
+        "#####################바운드를 찾는 포지션 함수형태#########################################################"
+      );
+      console.log(positions);
+      // (10)[{…},{…},{…},{…},{…},{…},{…},{…},{…},{…},__ob__:Observer]
       const bounds = positions.reduce(
         (bounds, latlng) => bounds.extend(latlng),
         new kakao.maps.LatLngBounds()
