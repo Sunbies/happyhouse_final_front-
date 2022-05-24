@@ -68,7 +68,7 @@
     </b-container>
     <!--================================ 유저 정보 수정 ================================-->
     <b-container v-else>
-      <a>유효성 검사는 됐는데 실패시에도 서밋하는문제있음</a>
+      <!-- <a>유효성 검사는 됐는데 실패시에도 서밋하는문제있음</a> -->
       <b-col class="d-flex justify-content-center">
         <b-card class="text-center mt-3" style="width: 40rem" align="left">
           <b-form class="text-left" @submit.stop.prevent="confirm">

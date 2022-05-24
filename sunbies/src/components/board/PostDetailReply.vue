@@ -5,6 +5,7 @@
         v-for="(replyitem, index) in replylist"
         :key="index"
         :replyitem="replyitem"
+        @refreshpost="refreshPostDetail"
       />
     </div>
     <b-row class="align-items-center">
@@ -46,6 +47,10 @@ export default {
   methods: {
     ...mapActions("boardStore", ["actWriteReply"]),
     submitreply() {
+      if (!this.userId) {
+        alert("먼저 로그인하세요.");
+        return;
+      }
       if (!this.replycontent) {
         alert("댓글 내용을 입력하세요.");
         return;
@@ -58,7 +63,8 @@ export default {
       })
         .then((res) => {
           if (res.data.message === "success") {
-            this.$router.go(); // 새로고침
+            this.replycontent = "";
+            this.$emit("refreshpost");
           } else {
             console.log(res);
           }
@@ -66,6 +72,9 @@ export default {
         .catch((e) => {
           console.log(e);
         });
+    },
+    refreshPostDetail() {
+      this.$emit("refreshpost");
     },
   },
 };

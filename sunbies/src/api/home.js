@@ -4,4 +4,8 @@ const api = apiInstance();
 
 const getLatestDeals = () => api.get(`/main/latestdeals`);
 
-export { getLatestDeals };
+const getLatestPosts = () => api.get(`/main/latestposts`);
+
+const getHotPosts = () => api.get(`/main/hotposts`);
+
+export { getLatestDeals, getLatestPosts, getHotPosts };

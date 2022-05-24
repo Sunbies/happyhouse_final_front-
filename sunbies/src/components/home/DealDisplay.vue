@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <b-container class="d-flex justify-content-start">
+  <div class="pb-5">
+    <b-container class="pb-3">
       <h3>실거래가 정보 조회</h3>
     </b-container>
     <b-container>
@@ -13,6 +13,8 @@
           img-src="https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202108/17/89dbadb1-755d-480b-96f4-9a772155aafb.jpg"
           img-alt="Image"
           img-top
+          @click.prevent="mvDealPage(deal)"
+          style="cursor: pointer"
         >
           <div>{{ deal | address }}</div>
           <div>{{ deal.dealAmount }}만원</div>
@@ -31,8 +33,15 @@ export default {
     ...mapState("homeStore", ["latestDeals"]),
   },
   methods: {
+    ...mapMutations("houseStore", ["SET_FAVORITE_HOUSE", "SET_FROM_FAVORITE"]),
     ...mapActions("homeStore", ["actGetLatestDeals"]),
-    ...mapMutations("homeStore", ["CLEAR_LATEST_DEALS"]),
+    mvDealPage(house) {
+      this.SET_FAVORITE_HOUSE(house);
+      this.SET_FROM_FAVORITE(true);
+      this.$router.push({
+        name: "searchDeal",
+      });
+    },
   },
   filters: {
     address(deal) {
@@ -41,9 +50,6 @@ export default {
   },
   created() {
     this.actGetLatestDeals();
-  },
-  destroyed() {
-    this.CLEAR_LATEST_DEALS();
   },
 };
 </script>
