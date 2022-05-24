@@ -1,10 +1,10 @@
 <template>
-  <div style="background-color: yellowgreen">
+  <div>
     <b-container class="d-flex justify-content-start">
       <h3>커뮤니티</h3>
     </b-container>
     <b-container>
-      <b-card-group deck style="background-color: blanchedalmond">
+      <b-card-group deck>
         <b-card
           v-for="card in 2"
           :key="card"
