@@ -5,6 +5,8 @@
       id="sidebar-right"
       title="Sidebar"
       right
+      backdrop
+      backdrop-variant="transparent"
       no-header
       bg-variant="secondary"
       shadow
@@ -257,5 +259,8 @@ export default {
   left: auto;
   top: 73px;
   right: 0;
+}
+.bg-dark {
+  /* background-color: #343a40 !important; */
 }
 </style>
