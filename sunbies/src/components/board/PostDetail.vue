@@ -43,6 +43,7 @@
         <span style="font-size: 0.9rem">{{ postDetail.dislikeCount }}</span>
       </div>
       <div
+        @click.prevent="copyToClipboard"
         class="d-inline-block p-2 text-center rounded-circle bg-light"
         style="width: 40px; height: 40px; cursor: pointer"
       >
@@ -53,6 +54,7 @@
     <post-detail-reply
       :replylist="postDetail.replyList"
       :postno="postDetail.postno"
+      @refreshpost="refreshPostDetail"
     />
   </div>
 </template>
@@ -91,6 +93,9 @@ export default {
       return this.userPosition === -1;
     },
   },
+  created() {
+    this.refreshPostDetail();
+  },
   methods: {
     ...mapActions("boardStore", [
       "setPostDetail",
@@ -100,6 +105,26 @@ export default {
       "actUpdatePosition",
       "actDeletePosition",
     ]),
+
+    refreshPostDetail() {
+      this.setPostDetail(this.$route.params.postno);
+      if (!this.userId) return;
+      this.actGetPosition({
+        postno: this.$route.params.postno,
+        id: this.userId,
+      })
+        .then((res) => {
+          if (res.data.message === "success") {
+            this.userPosition = res.data.position;
+          } else {
+            console.log(res);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+
     modifyPost() {
       this.$router.push({
         name: "postmodify",
@@ -108,6 +133,7 @@ export default {
         },
       });
     },
+
     deletePost() {
       this.actDeletePost(this.postDetail.postno)
         .then((res) => {
@@ -126,7 +152,12 @@ export default {
           console.log(e);
         });
     },
+
     setPositionToLike() {
+      if (!this.userId) {
+        alert("먼저 로그인하세요.");
+        return;
+      }
       if (this.userPosition === -1) {
         this.actUpdatePosition({
           postno: this.postDetail.postno,
@@ -135,7 +166,7 @@ export default {
         })
           .then((res) => {
             if (res.data.message === "success") {
-              this.$router.go();
+              this.refreshPostDetail();
             } else {
               console.log(res);
             }
@@ -153,7 +184,7 @@ export default {
         })
           .then((res) => {
             if (res.data.message === "success") {
-              this.$router.go();
+              this.refreshPostDetail();
             } else {
               console.log(res);
             }
@@ -170,7 +201,7 @@ export default {
         })
           .then((res) => {
             if (res.data.message === "success") {
-              this.$router.go();
+              this.refreshPostDetail();
             } else {
               console.log(res);
             }
@@ -181,7 +212,12 @@ export default {
         return;
       }
     },
+
     setPositionToDislike() {
+      if (!this.userId) {
+        alert("먼저 로그인하세요.");
+        return;
+      }
       if (this.userPosition === 1) {
         this.actUpdatePosition({
           postno: this.postDetail.postno,
@@ -190,7 +226,7 @@ export default {
         })
           .then((res) => {
             if (res.data.message === "success") {
-              this.$router.go();
+              this.refreshPostDetail();
             } else {
               console.log(res);
             }
@@ -208,7 +244,7 @@ export default {
         })
           .then((res) => {
             if (res.data.message === "success") {
-              this.$router.go();
+              this.refreshPostDetail();
             } else {
               console.log(res);
             }
@@ -225,7 +261,7 @@ export default {
         })
           .then((res) => {
             if (res.data.message === "success") {
-              this.$router.go();
+              this.refreshPostDetail();
             } else {
               console.log(res);
             }
@@ -236,23 +272,17 @@ export default {
         return;
       }
     },
-  },
-  created() {
-    this.setPostDetail(this.$route.params.postno);
-    this.actGetPosition({
-      postno: this.$route.params.postno,
-      id: this.userId,
-    })
-      .then((res) => {
-        if (res.data.message === "success") {
-          this.userPosition = res.data.position;
-        } else {
-          console.log(res);
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+
+    copyToClipboard() {
+      navigator.clipboard
+        .writeText(`localhost:8080${this.$route.fullPath}`)
+        .then(() => {
+          alert("클립보드에 복사되었습니다.");
+        })
+        .catch(() => {
+          alert("복사 실패");
+        });
+    },
   },
 };
 </script>

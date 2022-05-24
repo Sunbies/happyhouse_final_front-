@@ -234,6 +234,7 @@ export default {
       this.CLEAR_CATEGORYLIST_SPECITIC();
       this.CLEAR_CATEGORYSTATUS();
       this.detailHouse(this.favoriteHouse);
+      if (!this.userId) return;
       this.getHouseFavorite({
         house: this.favoriteHouse,
         id: this.userId,

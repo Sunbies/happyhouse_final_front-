@@ -4,11 +4,14 @@
     <topside-navbar-vue></topside-navbar-vue>
     <right-sidebar></right-sidebar>
     <router-view />
+    <footer-foot />
   </div>
 </template>
 <script>
 import TopsideNavbarVue from "@/components/template/TopsideNavbar.vue";
 import RightSidebar from "@/components/template/RightSidebar.vue";
+import FooterFoot from "@/components/template/FooterFoot.vue";
+
 export default {
   name: "HomeView",
   components: {
@@ -16,6 +19,7 @@ export default {
     RightSidebar,
     // LeftSideBarVue,
     // NavSidebarvue,
+    FooterFoot,
   },
 };
 </script>

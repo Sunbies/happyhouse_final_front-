@@ -4,6 +4,7 @@
     style="background-color: #e0e0e0"
   >
     <!-- Brand/logo -->
+<<<<<<< HEAD
     <!-- <img
       style="float: left; margin-right: 10px"
       src="@/assets/home.svg"
@@ -18,6 +19,15 @@
         src="@/assets/sunbis.png"
         alt="Happy House"
     /></router-link>
+=======
+    <router-link :to="{ name: 'home' }" class="navbar-brand ml-2">
+      <img
+        style="height: 50px; image-rendering: crisp-edges"
+        src="@/assets/logo/sunbies_small_god.png"
+        alt="Sunbies"
+      />
+    </router-link>
+>>>>>>> 095a467eb625b93a6bedfb409189af4b1ebef582
 
     <!-- Links -->
     <div

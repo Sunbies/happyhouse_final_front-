@@ -32,7 +32,7 @@ export default {
       this.actDeleteReply(this.replyitem.replyno)
         .then((res) => {
           if (res.data.message === "success") {
-            this.$router.go();
+            this.$emit("refreshpost");
           } else {
             console.log(res);
           }
