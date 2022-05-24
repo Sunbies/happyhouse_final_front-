@@ -49,6 +49,7 @@ export default {
       "positions",
       "bounds",
       "categoryList",
+      "categoryCode",
     ]),
   },
   watch: {
@@ -82,9 +83,14 @@ export default {
       this.displayMarker();
     },
     house: function () {
+      this.clearMarkers();
       console.log("house의 변경 감지, getCategory 시작");
       // 여기서 카테고리 검색 작업을 시작
       this.getCategory(this.house.lat, this.house.lng);
+    },
+    categoryCode: function () {
+      this.clearMarkers();
+      this.makeCategoryMarkerList();
     },
   },
   methods: {
@@ -161,18 +167,128 @@ export default {
       console.log("모든 카테고리값 다 넣음");
       console.log(this.categoryList);
     },
-    // placesSearchCB(data, status) {
-    //   console.log("콜백함수 placeSearchCB 들어옴");
-    //   if (status === kakao.maps.services.Status.OK) {
-    //     console.log(status);
-    //     console.log(data);
-    //     this.categoryList.{{data[0].category_croup_code}}
-    //     // displayPlaces(data);
-    //   } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-    //     // 검색결과가 없는경우 해야할 처리가 있다면 이곳에 작성해 주세요
-    //   } else if (status === kakao.maps.services.Status.ERROR) {
-    //     // 에러로 인해 검색결과가 나오지 않은 경우 해야할 처리가 있다면 이곳에 작성해 주세요
+    // 이건 상권마커들만 지워주는 마커관련함수
+    clearMarkers() {
+      if (this.markers.length > 0) {
+        this.markers.forEach((marker, index) => {
+          if (index != 0) marker.setMap(null);
+        });
+      }
+      this.markers = this.markers.slice(0, 1);
+    },
+    makeCategoryMarkerList() {
+      console.log("makeCategoryMarkerList 들어옴");
+      console.log("this.categoryCode = ");
+      console.log(this.categoryCode);
+      // for (const property in object) {
+      // console.log(`${property}: ${object[property]}`);
+      // }
+      let selectedCategoryList;
+      for (let category in this.categoryList) {
+        // console.log(this.categoryList[category]);
+        if (this.categoryList[category].length > 0) {
+          // 객체가 있다는걸로 판단
+          // alert(this.categoryList[category][0].category_group_code);
+          if (
+            this.categoryList[category][0].category_group_code ===
+            this.categoryCode
+          ) {
+            // alert("같은거 발견");
+            // alert(this.categoryList[category]);
+            selectedCategoryList = this.categoryList[category];
+            break;
+          }
+        }
+      }
+      console.log("selectedCategoryList = ");
+      console.log(selectedCategoryList);
+      console.log(
+        "이제 해당하는 리스트를 찾았으니 이걸 가지고 인포윈도우를 가진 마커 생성"
+      );
+      this.makeStoreMarker(selectedCategoryList);
+    },
+    makeStoreMarker(places) {
+      for (var i = 0; i < places.length; i++) {
+        // 마커를 생성하고 지도에 표시합니다
+        var marker = this.addMarker(
+          new kakao.maps.LatLng(places[i].y, places[i].x)
+        );
+        // 저 위에 order는 번혼데 무슨상관일까
+
+        // 마커와 검색결과 항목을 클릭 했을 때
+        // 장소정보를 표출하도록 클릭 이벤트를 등록합니다
+        (function (marker, place) {
+          kakao.maps.event.addListener(marker, "click", function () {
+            this.displayPlaceInfo(place);
+          });
+        })(marker, places[i]);
+        // (함수)(인자)
+      }
+    },
+    // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
+    addMarker(position) {
+      var imageSrc =
+          "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png", // 마커 이미지 url, 스프라이트 이미지를 씁니다
+        imageSize = new kakao.maps.Size(24, 35), // 마커 이미지의 크기
+        // imgOptions = {
+        //   spriteSize: new kakao.maps.Size(72, 208), // 스프라이트 이미지의 크기
+        //   spriteOrigin: new kakao.maps.Point(46, order * 36), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
+        //   offset: new kakao.maps.Point(11, 28), // 마커 좌표에 일치시킬 이미지 내에서의 좌표
+        // },
+        markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize),
+        marker = new kakao.maps.Marker({
+          position: position, // 마커의 위치
+          image: markerImage,
+        });
+
+      marker.setMap(this.map); // 지도 위에 마커를 표출합니다
+      this.markers.push(marker); // 배열에 생성된 마커를 추가합니다
+      console.log("마커 다 찍었음");
+      console.log(this.markers);
+      return marker;
+    },
+    // displayPlaceInfo(place) {
+    //   var content =
+    //     '<div class="placeinfo">' +
+    //     '   <a class="title" href="' +
+    //     place.place_url +
+    //     '" target="_blank" title="' +
+    //     place.place_name +
+    //     '">' +
+    //     place.place_name +
+    //     "</a>";
+
+    //   if (place.road_address_name) {
+    //     content +=
+    //       '    <span title="' +
+    //       place.road_address_name +
+    //       '">' +
+    //       place.road_address_name +
+    //       "</span>" +
+    //       '  <span class="jibun" title="' +
+    //       place.address_name +
+    //       '">(지번 : ' +
+    //       place.address_name +
+    //       ")</span>";
+    //   } else {
+    //     content +=
+    //       '    <span title="' +
+    //       place.address_name +
+    //       '">' +
+    //       place.address_name +
+    //       "</span>";
     //   }
+
+    //   content +=
+    //     '    <span class="tel">' +
+    //     place.phone +
+    //     "</span>" +
+    //     "</div>" +
+    //     '<div class="after"></div>';
+
+    //   contentNode.innerHTML = content;
+    //   placeOverlay.setPosition(new kakao.maps.LatLng(place.y, place.x));
+    //   placeOverlay.setMap(this.map);
     // },
 
     makeLatLng(markerPositions) {
@@ -189,15 +305,6 @@ export default {
       console.log("SET_MARKERS결과  positions");
       console.log(positions);
 
-      // console.log("this.markers");
-      // console.log(this.markers);
-      // this.markers = positions.map(
-      //   (position) =>
-      //     new kakao.maps.Marker({
-      //       map: this.map,
-      //       position,
-      //     })
-      // );
       // 가운데 위치 찾기
       const bounds = positions.reduce(
         (bounds, latlng) => bounds.extend(latlng),

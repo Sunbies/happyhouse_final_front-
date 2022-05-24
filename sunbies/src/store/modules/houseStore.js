@@ -44,7 +44,7 @@ const houseStore = {
       CE7: [],
     },
     categoryStatus: false,
-
+    categoryCode: null,
     pageNav: {},
   },
 
@@ -175,6 +175,15 @@ const houseStore = {
     CLEAR_CATEGORYSTATUS(state) {
       state.categoryStatus = false;
     },
+
+    SET_CATEGORYCODE(state, newCode) {
+      state.categoryCode = newCode;
+    },
+
+    CLEAR_CATEGORYCODE(state) {
+      state.categoryCode = null;
+    },
+
     SET_PAGE_NAV: (state, pageNav) => {
       state.pageNav = pageNav;
     },

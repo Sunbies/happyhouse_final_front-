@@ -1,6 +1,7 @@
 <template>
   <b-container>
     <b-row id="deal-sel">
+      <!-- 왼쪽 -->
       <b-col class="dealCont-header">
         <h3>거래정보</h3>
         <div id="dealCont-list" style="height: 550px; overflow: scroll">
@@ -55,62 +56,46 @@
         <div v-if="currentPageNo" class="d-flex justify-content-center">
           <deal-page-nav />
         </div>
+        <!-- 상권정보 뿌리기 -->
+        <div v-if="categoryStatus == true">
+          <a
+            href=""
+            @click.prevent="firstCategoryMarker(category)"
+            id="cafeDisplay"
+            v-for="(category, idx) in categoryList"
+            :key="idx"
+            style="backgroun"
+          >
+            <b-card
+              style="
+                background-color: #7f7f7f;
+                outline-style: solid;
+                outline-color: white;
+                outline-width: 1px;
+                width: 7em;
+              "
+            >
+              <b-card-img
+                :src="require(`@/assets/${idx}.png`)"
+                alt="cafe"
+                top
+                style="
+                  max-width: 5em;
+                  background-color: #ffffff;
+                  border-radius: 15px;
+                "
+              ></b-card-img>
+              <b-card-text style="color: white">
+                {{ category.length }}
+              </b-card-text>
+            </b-card>
+          </a>
+        </div>
       </b-col>
       <!-- 여기에 디테일 뷰 보여야함 -->
       <b-col cols="7">
         <h3>거래 상세 정보</h3>
         <div>
-          <!-- <b-container v-if="houseInfo" class="bv-example-row">
-            <b-row>
-              <b-col
-                ><h3>{{ houseInfo.아파트 }}</h3></b-col
-              >
-            </b-row>
-            <b-row class="mb-2 mt-1">
-              <b-col
-                ><b-img
-                  :src="require('@/assets/apt.jpg')"
-                  fluid-grow
-                  style="height: 20em"
-                ></b-img
-              ></b-col>
-            </b-row>
-            <b-row>
-              <b-col>
-                <b-alert show variant="secondary"
-                  >일련번호 : {{ houseInfo.no }}</b-alert
-                >
-              </b-col>
-            </b-row>
-            <b-row>
-              <b-col>
-                <b-alert show variant="primary"
-                  >아파트 이름 : {{ houseInfo.apartmentName }}
-                </b-alert>
-              </b-col>
-            </b-row>
-            <b-row>
-              <b-col>
-                <b-alert show variant="info"
-                  >법정동 : {{ houseInfo.dongCode }}
-                </b-alert>
-              </b-col>
-            </b-row>
-            <b-row>
-              <b-col>
-                <b-alert show variant="warning"
-                  >층수 : {{ houseInfo.floor }}층</b-alert
-                >
-              </b-col>
-            </b-row>
-            <b-row>
-              <b-col>
-                <b-alert show variant="danger"
-                  >거래금액 : {{ houseInfo.dealAmount }}원</b-alert
-                >
-              </b-col>
-            </b-row>
-          </b-container> -->
           <!-- 카드로 해야한다. -->
           <b-card
             v-if="house"
@@ -211,39 +196,6 @@
         </div>
       </b-col>
     </b-row>
-    <b-row v-if="categoryStatus == true">
-      <div
-        v-for="(category, idx) in categoryList"
-        :key="idx"
-        style="background-color: #e0e0e0"
-      >
-        <a href="" @click.prevent="" id="cafeDisplay">
-          <b-card
-            style="
-              background-color: #7f7f7f;
-              outline-style: solid;
-              outline-color: white;
-              outline-width: 1px;
-              width: 7em;
-            "
-          >
-            <b-card-img
-              :src="require(`@/assets/${idx}.png`)"
-              alt="cafe"
-              top
-              style="
-                max-width: 5em;
-                background-color: #ffffff;
-                border-radius: 15px;
-              "
-            ></b-card-img>
-            <b-card-text style="color: white">
-              {{ category.length }}
-            </b-card-text>
-          </b-card>
-        </a>
-      </div>
-    </b-row>
   </b-container>
 </template>
 
@@ -258,36 +210,6 @@ export default {
     return {
       currCategoy: "",
       houseInfo: null,
-      // curentCategoryList: {
-      //   // 대형마트
-      //   MT1: [],
-      //   // 어린이집, 유치원
-      //   PS3: [],
-      //   // 학원
-      //   AC5: [],
-      //   // 은행
-      //   BK9: [],
-      //   // 관광명소
-      //   AT4: [],
-      //   // 음식점
-      //   FD6: [],
-      //   // 병원
-      //   HP8: [],
-      //   // 약국
-      //   PM9: [],
-      //   // 편의점
-      //   CS2: [],
-      //   // 학교
-      //   SC4: [],
-      //   // 자히철역
-      //   SW8: [],
-      //   // 문화시설
-      //   CT1: [],
-      //   // 공공기관
-      //   PO3: [],
-      //   // 카페
-      //   CE7: [],
-      // },
     };
   },
   created() {
@@ -338,7 +260,19 @@ export default {
       "CLEAR_CATEGORYLIST_SPECITIC",
       "CLEAR_CATEGORYSTATUS",
       "CLEAR_PAGE_NAV",
+      "SET_CATEGORYCODE",
     ]),
+    firstCategoryMarker(selectedCategory) {
+      if (selectedCategory.length == 0) {
+        alert("반경 500m안에 해당 상권은 없습니다.");
+      } else {
+        // 상권이 있는걸 확인했으니
+        // 마커를 넣어줘야한다.
+        this.SET_CATEGORYCODE(selectedCategory[0].category_group_code);
+        // alert(selectedCategory);
+      }
+    },
+
     setHouse(house) {
       this.SET_DETAIL_HOUSE(house);
     },

@@ -7,7 +7,6 @@
       right
       no-header
       bg-variant="secondary"
-      :backdrop="true"
       shadow
     >
       <div style="background-color: #f6f6f6">
@@ -247,4 +246,10 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.b-sidebar.b-sidebar-right {
+  left: auto;
+  top: 73px;
+  right: 0;
+}
+</style>
