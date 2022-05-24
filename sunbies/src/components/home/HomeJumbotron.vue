@@ -1,18 +1,24 @@
 <template>
-  <div class="d-flex justify-content-center" style="background-color: red">
-    <b-jumbotron
-      header="BootstrapVue"
-      lead="Bootstrap v4 Components for Vue.js 2"
-      style="background-color: #f4f4f4; width: 40em"
-    >
-      <p>For more information visit website</p>
-      <b-button variant="primary" href="#">More Info</b-button>
-    </b-jumbotron>
-  </div>
+  <b-container fluid class="pt-5">
+    <b-container>
+      <b-jumbotron
+        bg-variant="transparent"
+        header="Happy House"
+        lead="Welcome to Happy house."
+      >
+        <p>
+          전국 아파트 실거래 기록을 조회하고 자유롭게 관련된 이야기를 나눌 수
+          있습니다.
+        </p>
+      </b-jumbotron>
+    </b-container>
+  </b-container>
 </template>
 
 <script>
-export default {};
+export default {
+  name: "HomeJumbotron",
+};
 </script>
 
 <style></style>
