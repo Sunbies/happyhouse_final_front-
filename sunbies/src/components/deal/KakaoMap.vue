@@ -212,6 +212,12 @@ export default {
       );
       this.makeStoreMarker(selectedCategoryList);
     },
+    // 인포윈도우 지우기
+    closeInfowindow() {
+      alert("dslkdfj");
+      // this.infowindow.setMap(null);
+    },
+
     makeStoreMarker(places) {
       let tempmarkers = [];
       console.log(
@@ -240,13 +246,96 @@ export default {
         //   content: `<div style="padding:5px;">${places[i].place_name}</div>`,
         //   removable: true,
         // });
-        ((marker, place) => {
+        // ((marker, place) => {
+        ((marker) => {
           kakao.maps.event.addListener(marker, "click", () => {
-            this.infowindow = new kakao.maps.InfoWindow({
+            // HTMLElement
+            var wrap = document.createElement("div");
+            wrap.className = "wrap";
+
+            var info = document.createElement("div");
+            info.className = "info";
+            wrap.appendChild(info);
+
+            var title = document.createElement("div");
+            title.className = "title";
+            info.appendChild(title);
+            title.textContent = "카카오 스페이스닷원";
+
+            var close = document.createElement("div");
+            close.className = "close";
+            // close.setAttribute("v-bind:onclick", "closeInfowindow");
+            // close.setAttribute("v-bind:onclick", "closeInfowindow()");
+            // close.setAttribute("@click", "closeInfowindow()");
+            close.setAttribute("title", "닫기");
+            close.onclick = function () {
+              infowindow.setMap(null);
+            };
+            title.appendChild(close);
+
+            var body = document.createElement("div");
+            body.className = "body";
+            info.appendChild(body);
+
+            var img = document.createElement("div");
+            img.className = "img";
+            body.appendChild(img);
+
+            var mainImg = document.createElement("img");
+            // mainImg.setAttribute(
+            //   "src",
+            //   "https://cfile181.uf.daum.net/image/250649365602043421936D"
+            // );
+            // mainImg.setAttribute("width", "73");
+            // mainImg.setAttribute("height", "70");
+            img.appendChild(mainImg);
+
+            var desc = document.createElement("div");
+            desc.className = "desc";
+            body.appendChild(desc);
+
+            var ellipsis = document.createElement("div");
+            ellipsis.className = "ellipsis";
+            ellipsis.textContent = "제주특별자치도 제주시 첨단로 242";
+            desc.append(ellipsis);
+
+            var jibun_ellipsis = document.createElement("div");
+            jibun_ellipsis.className = "jibun ellipsis";
+            jibun_ellipsis.textContent = "(우) 63309 (지번) 영평동 2181";
+            desc.append(jibun_ellipsis);
+
+            var div = document.createElement("div");
+            var link = document.createElement("a");
+            link.className = "link";
+            link.setAttribute("href", "https://www.kakaocorp.com/main");
+            link.setAttribute("target", "_blank");
+            link.textContent = "홈페이지";
+            div.appendChild(link);
+            desc.appendChild(div);
+
+            var infowindow = new kakao.maps.CustomOverlay({
               map: this.map, // 인포윈도우가 표시될 지도
               position,
-              content: `<div style="padding:5px;">${place.place_name}</div>`,
-              removable: true,
+              // content: `<div style="padding:5px;">${place.place_name}</div>`,
+              content: wrap,
+              // '<div class="wrap">' +
+              // '    <div class="info">' +
+              // '        <div class="title">' +
+              // "            카카오 스페이스닷원" +
+              // '            <div class="close" @click="closeInfowindow" title="닫기"></div>' +
+              // "        </div>" +
+              // '        <div class="body">' +
+              // '            <div class="img">' +
+              // // '                <img src="https://cfile181.uf.daum.net/image/250649365602043421936D" width="73" height="70">' +
+              // "           </div>" +
+              // '            <div class="desc">' +
+              // '                <div class="ellipsis">제주특별자치도 제주시 첨단로 242</div>' +
+              // '                <div class="jibun ellipsis">(우) 63309 (지번) 영평동 2181</div>' +
+              // '                <div><a href="https://www.kakaocorp.com/main" target="_blank" class="link">홈페이지</a></div>' +
+              // "            </div>" +
+              // "        </div>" +
+              // "    </div>" +
+              // "</div>",
             });
             // this.infowindow.open(this.map, marker);
             // console.log(place);
@@ -415,5 +504,97 @@ export default {
 #map {
   width: 100%;
   height: 500px;
+}
+.wrap {
+  position: absolute;
+  left: 0;
+  bottom: 40px;
+  width: 288px;
+  height: 132px;
+  margin-left: -144px;
+  text-align: left;
+  overflow: hidden;
+  font-size: 12px;
+  font-family: "Malgun Gothic", dotum, "돋움", sans-serif;
+  line-height: 1.5;
+}
+.wrap * {
+  padding: 0;
+  margin: 0;
+}
+.wrap .info {
+  width: 286px;
+  height: 120px;
+  border-radius: 5px;
+  border-bottom: 2px solid #ccc;
+  border-right: 1px solid #ccc;
+  overflow: hidden;
+  background: #fff;
+}
+.wrap .info:nth-child(1) {
+  border: 0;
+  box-shadow: 0px 1px 2px #888;
+}
+.info .title {
+  padding: 5px 0 0 10px;
+  height: 30px;
+  background: #eee;
+  border-bottom: 1px solid #ddd;
+  font-size: 18px;
+  font-weight: bold;
+}
+.info .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #888;
+  width: 17px;
+  height: 17px;
+  background: url("https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png");
+}
+.info .close:hover {
+  cursor: pointer;
+}
+.info .body {
+  position: relative;
+  overflow: hidden;
+}
+.info .desc {
+  position: relative;
+  margin: 13px 0 0 90px;
+  height: 75px;
+}
+.desc .ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.desc .jibun {
+  font-size: 11px;
+  color: #888;
+  margin-top: -2px;
+}
+.info .img {
+  position: absolute;
+  top: 6px;
+  left: 5px;
+  width: 73px;
+  height: 71px;
+  border: 1px solid #ddd;
+  color: #888;
+  overflow: hidden;
+}
+.info:after {
+  content: "";
+  position: absolute;
+  margin-left: -12px;
+  left: 50%;
+  bottom: 0;
+  width: 22px;
+  height: 12px;
+  background: url("https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png");
+}
+.info .link {
+  color: #5085bb;
 }
 </style>

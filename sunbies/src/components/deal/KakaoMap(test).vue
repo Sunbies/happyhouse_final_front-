@@ -1,9 +1,9 @@
-<template>
+<!-- <template>
   <div>
     <div id="map"></div>
     <div class="button-group">
-      <!-- <button @click="changeSize(0)">Hide</button> -->
-      <!-- <button @click="changeSize(400)">show</button> -->
+       <button @click="changeSize(0)">Hide</button> 
+       <button @click="changeSize(400)">show</button> -->
       <button @click="displayMarker(markerPositions1)">marker set 1</button>
       <button @click="displayMarker(markerPositions2)">marker set 2</button>
       <button @click="displayMarker([])">marker set 3 (empty)</button>
@@ -169,4 +169,4 @@ export default {
   width: auto;
   height: 400px;
 }
-</style>
+</style> -->
