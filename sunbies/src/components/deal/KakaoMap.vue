@@ -15,11 +15,7 @@ export default {
   // props: ["options"],
   data() {
     return {
-      map: null,
       markers: [],
-      contentNode: null,
-      placeOverlay: null,
-      infowindow: null,
     };
   },
   created() {
@@ -214,8 +210,10 @@ export default {
     },
     // 인포윈도우 지우기
     closeInfowindow() {
-      alert("dslkdfj");
-      // this.infowindow.setMap(null);
+      // if (infowindow) {
+      //   infowindow.setMap(null);
+      //   infowindow = null;
+      // }
     },
 
     makeStoreMarker(places) {
@@ -246,115 +244,100 @@ export default {
         //   content: `<div style="padding:5px;">${places[i].place_name}</div>`,
         //   removable: true,
         // });
+        var infowindow = null;
         // ((marker, place) => {
-        ((marker) => {
-          kakao.maps.event.addListener(marker, "click", () => {
-            // HTMLElement
-            var wrap = document.createElement("div");
-            wrap.className = "wrap";
+        ((marker, place) => {
+          kakao.maps.event.addListener(
+            marker,
+            "mouseover",
+            () => {
+              // if (infowindow) {
+              //   infowindow.setMap(null);
+              //   infowindow = null;
+              // }
 
-            var info = document.createElement("div");
-            info.className = "info";
-            wrap.appendChild(info);
+              // HTMLElement
+              var wrap = document.createElement("div");
+              wrap.className = "wrap";
 
-            var title = document.createElement("div");
-            title.className = "title";
-            info.appendChild(title);
-            title.textContent = "카카오 스페이스닷원";
+              var info = document.createElement("div");
+              info.className = "info";
+              wrap.appendChild(info);
 
-            var close = document.createElement("div");
-            close.className = "close";
-            // close.setAttribute("v-bind:onclick", "closeInfowindow");
-            // close.setAttribute("v-bind:onclick", "closeInfowindow()");
-            // close.setAttribute("@click", "closeInfowindow()");
-            close.setAttribute("title", "닫기");
-            close.onclick = function () {
+              var title = document.createElement("h5");
+              title.className = "title";
+              info.appendChild(title);
+              title.textContent = place.place_name;
+
+              // var close = document.createElement("div");
+              // close.className = "close";
+              // close.setAttribute("v-bind:onclick", "closeInfowindow");
+              // close.setAttribute("v-bind:onclick", "closeInfowindow()");
+              // close.setAttribute("@click", "closeInfowindow()");
+              // close.setAttribute("title", "닫기");
+              // close.onclick = function () {
+              // infowindow.setMap(null);
+              // };
+              // title.appendChild(close);
+
+              var body = document.createElement("div");
+              body.className = "body";
+              info.appendChild(body);
+
+              var img = document.createElement("div");
+              img.className = "img";
+              body.appendChild(img);
+
+              var mainImg = document.createElement("img");
+              mainImg.setAttribute(
+                "src",
+                document
+                  .getElementById(place.category_group_code)
+                  .getAttribute("src")
+                // "/img/MT1.2f66b3d8.png"
+                // "https://cfile181.uf.daum.net/image/250649365602043421936D"
+              );
+              mainImg.setAttribute("width", "73");
+              mainImg.setAttribute("height", "70");
+              img.appendChild(mainImg);
+
+              var desc = document.createElement("div");
+              desc.className = "desc";
+              body.appendChild(desc);
+
+              var ellipsis = document.createElement("div");
+              ellipsis.className = "ellipsis";
+              ellipsis.textContent = place.address_name;
+              desc.append(ellipsis);
+
+              var jibun_ellipsis = document.createElement("div");
+              jibun_ellipsis.className = "jibun ellipsis";
+              jibun_ellipsis.textContent = place.road_address_name;
+              desc.append(jibun_ellipsis);
+
+              var div = document.createElement("div");
+              var link = document.createElement("div");
+              link.className = "link";
+              // link.setAttribute("href", "https://www.kakaocorp.com/main");
+              // link.setAttribute("target", "_blank");
+              link.textContent = place.phone;
+              div.appendChild(link);
+              desc.appendChild(div);
+              infowindow = new kakao.maps.CustomOverlay({
+                map: this.map, // 인포윈도우가 표시될 지도
+                position,
+                content: wrap,
+              });
+            },
+            kakao.maps.event.addListener(marker, "mouseout", function () {
+              // 마커에 마우스아웃 이벤트가 발생하면 인포윈도우를 제거합니다
+              // infowindow.close();
               infowindow.setMap(null);
-            };
-            title.appendChild(close);
-
-            var body = document.createElement("div");
-            body.className = "body";
-            info.appendChild(body);
-
-            var img = document.createElement("div");
-            img.className = "img";
-            body.appendChild(img);
-
-            var mainImg = document.createElement("img");
-            // mainImg.setAttribute(
-            //   "src",
-            //   "https://cfile181.uf.daum.net/image/250649365602043421936D"
-            // );
-            // mainImg.setAttribute("width", "73");
-            // mainImg.setAttribute("height", "70");
-            img.appendChild(mainImg);
-
-            var desc = document.createElement("div");
-            desc.className = "desc";
-            body.appendChild(desc);
-
-            var ellipsis = document.createElement("div");
-            ellipsis.className = "ellipsis";
-            ellipsis.textContent = "제주특별자치도 제주시 첨단로 242";
-            desc.append(ellipsis);
-
-            var jibun_ellipsis = document.createElement("div");
-            jibun_ellipsis.className = "jibun ellipsis";
-            jibun_ellipsis.textContent = "(우) 63309 (지번) 영평동 2181";
-            desc.append(jibun_ellipsis);
-
-            var div = document.createElement("div");
-            var link = document.createElement("a");
-            link.className = "link";
-            link.setAttribute("href", "https://www.kakaocorp.com/main");
-            link.setAttribute("target", "_blank");
-            link.textContent = "홈페이지";
-            div.appendChild(link);
-            desc.appendChild(div);
-
-            var infowindow = new kakao.maps.CustomOverlay({
-              map: this.map, // 인포윈도우가 표시될 지도
-              position,
-              // content: `<div style="padding:5px;">${place.place_name}</div>`,
-              content: wrap,
-              // '<div class="wrap">' +
-              // '    <div class="info">' +
-              // '        <div class="title">' +
-              // "            카카오 스페이스닷원" +
-              // '            <div class="close" @click="closeInfowindow" title="닫기"></div>' +
-              // "        </div>" +
-              // '        <div class="body">' +
-              // '            <div class="img">' +
-              // // '                <img src="https://cfile181.uf.daum.net/image/250649365602043421936D" width="73" height="70">' +
-              // "           </div>" +
-              // '            <div class="desc">' +
-              // '                <div class="ellipsis">제주특별자치도 제주시 첨단로 242</div>' +
-              // '                <div class="jibun ellipsis">(우) 63309 (지번) 영평동 2181</div>' +
-              // '                <div><a href="https://www.kakaocorp.com/main" target="_blank" class="link">홈페이지</a></div>' +
-              // "            </div>" +
-              // "        </div>" +
-              // "    </div>" +
-              // "</div>",
-            });
-            // this.infowindow.open(this.map, marker);
-            // console.log(place);
-            // alert(place.place_name);
-            // 여기까진 된다 알림창 뜬다.
-            // 얘가 안된다.
-            //  new kakao.maps.InfoWindow({
-            //   map: this.map, // 인포윈도우가 표시될 지도
-            //   position: new kakao.maps.LatLng(place.x, place.y),
-            //   content: `<div style="padding:5px;">${place.place_name}</div>`,
-            //   removable: true,
-            // });
-            // this.displayPlaceInfo(place);
-            // this.infowindow = new kakao.maps.InfoWindow({
-            //   content: place, // 인포윈도우에 표시할 내용
-            // });
-            // this.infowindow.open(this.map, marker);
-          });
+              infowindow = null;
+            })
+          );
         })(marker, places[i]);
+
         // (함수)(인자)
 
         console.log(

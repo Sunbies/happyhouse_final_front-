@@ -57,14 +57,13 @@
           <deal-page-nav />
         </div>
         <!-- 상권정보 뿌리기 -->
-        <div v-if="categoryStatus == true">
-          <a
-            href=""
-            @click.prevent="firstCategoryMarker(category)"
+        <div v-if="categoryStatus == true" id="상권정보">
+          <b-button
             id="cafeDisplay"
+            @click.prevent="firstCategoryMarker(category)"
             v-for="(category, idx) in categoryList"
             :key="idx"
-            style="backgroun"
+            style="maxwid"
           >
             <b-card
               style="
@@ -76,6 +75,7 @@
               "
             >
               <b-card-img
+                v-bind:id="idx"
                 :src="require(`@/assets/${idx}.png`)"
                 alt="cafe"
                 top
@@ -85,11 +85,11 @@
                   border-radius: 15px;
                 "
               ></b-card-img>
-              <b-card-text style="color: white">
+              <b-card-text style="color: white; padding-top: 20px">
                 {{ category.length }}
               </b-card-text>
             </b-card>
-          </a>
+          </b-button>
         </div>
       </b-col>
       <!-- 여기에 디테일 뷰 보여야함 -->
