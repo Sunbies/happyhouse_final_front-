@@ -274,6 +274,19 @@ const houseStore = {
     },
 
     getHouseFavorite: ({ commit }, { house, id }) => {
+      countFavorite(house.aptCode)
+        .then((res) => {
+          if (res.data.message === "success") {
+            console.log(res.data);
+            commit("SET_HOUSE_FAVORITE_COUNT", res.data.favoriteCount);
+          } else {
+            console.log(res);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      if (id === "") return;
       checkFavorite({
         id: id,
         aptCode: house.aptCode,
@@ -282,18 +295,6 @@ const houseStore = {
           if (res.data.message === "success") {
             console.log(res.data);
             commit("SET_USER_HOUSE_POSITION", res.data.isFavorite);
-          } else {
-            console.log(res);
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-      countFavorite(house.aptCode)
-        .then((res) => {
-          if (res.data.message === "success") {
-            console.log(res.data);
-            commit("SET_HOUSE_FAVORITE_COUNT", res.data.favoriteCount);
           } else {
             console.log(res);
           }

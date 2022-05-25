@@ -97,15 +97,14 @@
         <h3>거래 상세 정보</h3>
         <div>
           <!-- 카드로 해야한다. -->
-          <b-card
-            v-if="house"
-            img-src="https://littledeep.com/wp-content/uploads/2020/09/apartments-illustration-png-1024x853.png"
-            img-alt="Image"
-            img-top
-            tag="article"
-            style="height: 100%"
-            class="mb-2"
-          >
+          <b-card v-if="house" tag="article" style="height: 100%" class="mb-2">
+            <b-aspect
+              aspect="16:9"
+              class="house-img"
+              :style="`background-image: url(http://localhost/image/kakao/${makeSearchWord(
+                house
+              )});`"
+            ></b-aspect>
             <b-card-text>
               <h4>아파트 상세정보</h4>
 
@@ -216,6 +215,7 @@
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import DealPageNav from "@/components/deal/DealPageNav.vue";
 import { insertFavorite, deleteFavorite } from "@/api/favorite.js";
+import makeSearchWord from "@/util/makeSearchWord.js";
 
 const houseStore = "houseStore";
 
@@ -288,6 +288,7 @@ export default {
     },
   },
   methods: {
+    makeSearchWord,
     ...mapActions("houseStore", ["detailHouse", "getHouseFavorite"]),
     ...mapMutations(houseStore, [
       "CLEAR_HOUSE_LIST",
@@ -376,5 +377,11 @@ export default {
 <style scoped>
 .mouse-over-bgcolor {
   background-color: lightblue;
+}
+
+.house-img {
+  width: 100%;
+  background-size: cover;
+  background-position: center;
 }
 </style>
