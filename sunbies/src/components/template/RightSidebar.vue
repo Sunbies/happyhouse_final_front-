@@ -32,11 +32,13 @@
             />손님
           </h5>
           <h5 v-else>
-            <img
+            <!-- <img
               style="margin-right: 10px; height: 30px"
               src="@/assets/user.svg"
               alt="Happy House"
-            />{{ userInfo.id }}
+            /> -->
+            <b-avatar :text="userInfo.name"> </b-avatar>
+            {{ userInfo.id }}
           </h5>
         </b-navbar>
       </div>
