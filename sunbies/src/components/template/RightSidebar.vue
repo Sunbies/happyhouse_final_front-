@@ -89,7 +89,10 @@
               </div>
               <div v-if="!isLogin">
                 <div>
-                  <router-link class="menu-item" tag="div" :to="{ name: '' }"
+                  <router-link
+                    class="menu-item"
+                    tag="div"
+                    :to="{ name: 'findpassword' }"
                     >비밀번호 찾기</router-link
                   >
                 </div>
