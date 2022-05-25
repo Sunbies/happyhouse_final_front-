@@ -6,18 +6,19 @@
     <b-container>
       <b-card-group deck>
         <b-card
-          v-for="(deal, index) in latestDeals"
+          v-for="(house, index) in latestDeals"
           :key="index"
           align="left"
-          :title="deal.apartmentName"
-          img-src="https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202108/17/89dbadb1-755d-480b-96f4-9a772155aafb.jpg"
-          img-alt="Image"
+          :title="house.apartmentName"
+          :img-src="`http://localhost/image/kakao/${makeSearchWord(house)}`"
+          :img-alt="`${house.apartmentName} image`"
           img-top
-          @click.prevent="mvDealPage(deal)"
+          img-height="200px"
+          @click.prevent="mvDealPage(house)"
           style="cursor: pointer"
         >
-          <div>{{ deal | address }}</div>
-          <div>{{ deal.dealAmount }}만원</div>
+          <div>{{ house | address }}</div>
+          <div>{{ house.dealAmount }}만원</div>
         </b-card>
       </b-card-group>
     </b-container>
@@ -26,6 +27,7 @@
 
 <script>
 import { mapState, mapMutations, mapActions } from "vuex";
+import makeSearchWord from "@/util/makeSearchWord.js";
 
 export default {
   name: "DealDisplay",
@@ -33,6 +35,7 @@ export default {
     ...mapState("homeStore", ["latestDeals"]),
   },
   methods: {
+    makeSearchWord,
     ...mapMutations("houseStore", ["SET_FAVORITE_HOUSE", "SET_FROM_FAVORITE"]),
     ...mapActions("homeStore", ["actGetLatestDeals"]),
     mvDealPage(house) {
@@ -44,8 +47,8 @@ export default {
     },
   },
   filters: {
-    address(deal) {
-      return deal.sidoName + deal.gugunName + deal.dong + deal.jibun;
+    address(house) {
+      return `${house.sidoName} ${house.gugunName} ${house.dong} ${house.jibun}`;
     },
   },
   created() {
