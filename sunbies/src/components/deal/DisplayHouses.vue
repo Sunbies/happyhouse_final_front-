@@ -229,6 +229,7 @@ export default {
   created() {
     if (this.fromFavorite) {
       this.SET_FROM_FAVORITE(false);
+
       // this.CLEAR_DETAIL_HOUSE();
       // this.CLEAR_HOUSE_LIST();
       this.CLEAR_CATEGORYLIST_SPECITIC();
@@ -302,6 +303,7 @@ export default {
     firstCategoryMarker(selectedCategory) {
       if (selectedCategory.length == 0) {
         alert("반경 500m안에 해당 상권은 없습니다.");
+        this.SET_CATEGORYCODE(null);
       } else {
         // 상권이 있는걸 확인했으니
         // 마커를 넣어줘야한다.

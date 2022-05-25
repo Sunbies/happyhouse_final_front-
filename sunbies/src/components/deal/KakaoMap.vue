@@ -15,7 +15,13 @@ export default {
   // props: ["options"],
   data() {
     return {
+      // 아파트 마커배열
       markers: [],
+      // 현재 아파트 마커 배열
+      aptMarker: null,
+      aptBounds: null,
+      // 상권마커
+      storeMarkers: [],
     };
   },
   created() {
@@ -34,7 +40,7 @@ export default {
       });
       document.head.appendChild(script);
     } else {
-      //console.log("이미 로딩됨: ", window.kakao);
+      ////console.log("이미 로딩됨: ", window.kakao);
       this.initMap();
     }
   },
@@ -55,9 +61,10 @@ export default {
     houses: function () {
       // alert("아파트 리스트 생성, 개수는 " + this.houses.length + "개");
       let positions = [];
-      console.log(positions);
+      // alert(this.houses.length);
+      //console.log(positions);
       this.houses.forEach(function (house) {
-        console.log(house.lat + " " + house.lng);
+        //console.log(house.lat + " " + house.lng);
         let position = [house.lat, house.lng];
         if (
           !positions.some(function (value) {
@@ -67,11 +74,12 @@ export default {
             return false;
           })
         ) {
-          console.log("이 값은 positions에 없으므로 추가해준다.");
+          //console.log("이 값은 positions에 없으므로 추가해준다.");
           positions.push(position);
         }
       });
-      console.log("positions의 사이즈 = " + positions.length);
+      // alert("positions의 사이즈 = " + positions.length);
+
       if (positions.length == 0) {
         alert("해당하는 데이터가 없습니다.");
       } else {
@@ -82,14 +90,37 @@ export default {
       this.displayMarker();
     },
     house: function () {
-      this.clearMarkers();
-      console.log("house의 변경 감지, getCategory 시작");
+      // alert("house watch 들어옴");
+      this.SET_CATEGORYCODE(null);
+      // alert("SET_CATEGORYCODE 완료");
+      // 현재 화면에 뿌려져 있는 모든 상권마커 임시삭제
+      this.removeStoreMarkers();
+      // alert("removeStoreMarkers 완료");
+      console.log(this.markers);
+      //console.log("house의 변경 감지, getCategory 시작");
+      // 아파트 마커 이동하는 함수 시작
+      // 우선 모든 아파트 마커들을 지워준다.
+      this.removeMarkers(false);
+      // alert("removeMarkers 완료");
+      // 그 후 현재 아파트 마커만 찾아서 저장해주고 마커 찍어주고 맵 좌표도 옮겨준다.
+      // alert("아파트 마커를 찍어준다.");
+      this.aptMarker = new kakao.maps.Marker({
+        map: this.map,
+        position: new kakao.maps.LatLng(this.house.lat, this.house.lng),
+      });
+      // alert("바운드를 설정해준다.");
+      this.aptBounds = new kakao.maps.LatLng(this.house.lat, this.house.lng);
+      // alert(this.aptBounds);
+      this.map.setCenter(this.aptBounds);
       // 여기서 카테고리 검색 작업을 시작
       this.getCategory(this.house.lat, this.house.lng);
     },
+
     categoryCode: function () {
-      this.clearMarkers();
-      this.makeCategoryMarkerList();
+      this.removeStoreMarkers();
+      if (this.categoryCode) {
+        this.makeCategoryMarkerList();
+      }
     },
   },
   methods: {
@@ -102,6 +133,7 @@ export default {
       "CLEAR_CATEGORYLIST_SPECITIC",
       "SET_CATEGORYSTATUS",
       "CLEAR_CATEGORYSTATUS",
+      "SET_CATEGORYCODE",
     ]),
     ...mapActions(houseStore, ["setMarkers"]),
     initMap() {
@@ -115,35 +147,37 @@ export default {
       this.map = new kakao.maps.Map(container, options);
       this.placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 });
       this.contentNode = document.createElement("div"); // 커스텀 오버레이의 컨텐츠 엘리먼트 입니다
-      console.log("this.map");
-      console.log(this.map);
+      //console.log("this.map");
+      //console.log(this.map);
       // this.SET_MAP(new kakao.maps.Map(container, options));
     },
     getCategory(centerLat, centerLng) {
       // 중심좌표는 37.5861486417138, 126.966930414705
-      console.log("getCategory 들어옴");
-      console.log("this.map");
-      console.log(this.map);
+      //console.log("getCategory 들어옴");
+      //console.log("this.map");
+      //console.log(this.map);
       let ps = new kakao.maps.services.Places(this.map);
-      console.log("ps 생성");
-      console.log(ps);
+      //console.log("ps 생성");
+      //console.log(ps);
       // let tempCategory = {};
 
       for (let currentCategory in this.categoryList) {
-        console.log(currentCategory + "코드 검색 시작");
-        console.log("중심좌표는 " + centerLat + ", " + centerLng);
+        //console.log(currentCategory + "코드 검색 시작");
+        //console.log("중심좌표는 " + centerLat + ", " + centerLng);
         // ps.categorySearch(currentCategory, this.placesSearchCB,option);
         ps.categorySearch(
           currentCategory,
           (data, status) => {
-            console.log("콜백함수 placeSearchCB 들어옴");
+            //console.log("콜백함수 placeSearchCB 들어옴");
             if (status === kakao.maps.services.Status.OK) {
-              console.log(status);
-              console.log(data);
-              console.log(currentCategory);
-              console.log(this.categoryList[currentCategory]);
+              //console.log(status);
+              //console.log(data);
+              //console.log(currentCategory);
+              //console.log(this.categoryList[currentCategory]);
               this.SET_CATEGORYLIST_SPECITIC(data);
+              // 모든 검사를 다 마쳤을때
               if (data[0].category_group_code == "CE7") {
+                // 이게 트루여야 상권정보를 디스플레이해준다.
                 this.SET_CATEGORYSTATUS(true);
               }
               // tempCategory[currentCategory] =
@@ -165,28 +199,32 @@ export default {
           }
         );
       }
-      console.log("모든 카테고리값 다 넣음");
-      console.log(this.categoryList);
+      //console.log("모든 카테고리값 다 넣음");
+      //console.log(this.categoryList);
     },
     // 이건 상권마커들만 지워주는 마커관련함수
-    clearMarkers() {
-      if (this.markers.length > 0) {
-        this.markers.forEach((marker, index) => {
-          if (index != 0) marker.setMap(null);
+    removeStoreMarkers() {
+      if (this.storeMarkers.length > 0) {
+        // this.markers.forEach((marker, index) => {
+        this.storeMarkers.forEach((marker) => {
+          //console.log(index);
+          // if (index != 0)
+          marker.setMap(null);
         });
+        this.storeMarkers = [];
+        // this.markers = this.markers.slice(0, 1);
       }
-      this.markers = this.markers.slice(0, 1);
     },
     makeCategoryMarkerList() {
-      console.log("makeCategoryMarkerList 들어옴");
-      console.log("this.categoryCode = ");
-      console.log(this.categoryCode);
+      //console.log("makeCategoryMarkerList 들어옴");
+      //console.log("this.categoryCode = ");
+      //console.log(this.categoryCode);
       // for (const property in object) {
-      // console.log(`${property}: ${object[property]}`);
+      // //console.log(`${property}: ${object[property]}`);
       // }
       let selectedCategoryList;
       for (let category in this.categoryList) {
-        // console.log(this.categoryList[category]);
+        // //console.log(this.categoryList[category]);
         if (this.categoryList[category].length > 0) {
           // 객체가 있다는걸로 판단
           // alert(this.categoryList[category][0].category_group_code);
@@ -201,11 +239,11 @@ export default {
           }
         }
       }
-      console.log("selectedCategoryList = ");
-      console.log(selectedCategoryList);
-      console.log(
-        "이제 해당하는 리스트를 찾았으니 이걸 가지고 인포윈도우를 가진 마커 생성"
-      );
+      //console.log("selectedCategoryList = ");
+      //console.log(selectedCategoryList);
+      //console.log(
+      // "이제 해당하는 리스트를 찾았으니 이걸 가지고 인포윈도우를 가진 마커 생성"
+      // );
       this.makeStoreMarker(selectedCategoryList);
     },
     // 인포윈도우 지우기
@@ -217,23 +255,24 @@ export default {
     },
 
     makeStoreMarker(places) {
-      let tempmarkers = [];
-      console.log(
-        "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^makeStoreMarker에 들어온 places^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
-      );
-      console.log(places);
+      let tempPositions = [];
+      //console.log(
+      ("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^makeStoreMarker에 들어온 places^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+      // );
+      //console.log(places);
       for (var i = 0; i < places.length; i++) {
         // 마커를 생성하고 지도에 표시합니다
-        var marker = this.addMarker(
+        let marker = this.addMarker(
           new kakao.maps.LatLng(places[i].y, places[i].x),
           places[i].place_name
         );
+        this.storeMarkers.push(marker);
         let position = new kakao.maps.LatLng(places[i].y, places[i].x);
-        tempmarkers.push(position);
-        console.log(
-          "#####################상권 마커설정 반복문에서의 tempmarker#######################################################"
-        );
-        console.log(tempmarkers);
+        tempPositions.push(position);
+        //console.log(
+        ("#####################상권 마커설정 반복문에서의 tempmarker#######################################################");
+        // );
+        //console.log(tempmarkers);
         // 마커와 검색결과 항목을 클릭 했을 때
         // 장소정보를 표출하도록 클릭 이벤트를 등록합니다
         // 근데 왜 상권정보 버튼을 실행하자마자 이게뜨는거지?
@@ -340,12 +379,17 @@ export default {
 
         // (함수)(인자)
 
-        console.log(
-          "#####################상권 마커 설정에서의 marker#######################################################"
-        );
-        console.log(tempmarkers);
+        //console.log(
+        // "#####################상권 마커 설정에서의 marker#######################################################"
+        // );
+        //console.log(tempmarkers);
       }
-      const bounds = tempmarkers.reduce(
+
+      // reduce함수는 배열의 각 요서에 대해 주어진 함수를 실행하고 하나의 결과값을 반환한다.
+      // 여기있는 tempPositions는 가게들의 위치정보들만 담고있다는 단점이 있다
+      // 하여 현재 아파트 위치에 대한 정보도 여기에 임시 추가하여 바운드를 같이 찾아줄 필요성이 있다
+      // 그러기 위해서 아파트의 위치, 마커, 등등의 정보도 따로 저장해 줄 필요가 있어보인다.
+      const bounds = tempPositions.reduce(
         (bounds, latlng) => bounds.extend(latlng),
         new kakao.maps.LatLngBounds()
       );
@@ -372,13 +416,13 @@ export default {
 
       marker.setMap(this.map); // 지도 위에 마커를 표출합니다
       this.markers.push(marker); // 배열에 생성된 마커를 추가합니다
-      console.log("마커 다 찍었음");
-      console.log(this.markers);
+      //console.log("마커 다 찍었음");
+      //console.log(this.markers);
       return marker;
     },
 
     displayPlaceInfo(place) {
-      alert("displayPlaceInfo 들어왔음");
+      // alert("displayPlaceInfo 들어왔음");
       var content =
         '<div class="placeinfo">' +
         '   <a class="title" href="' +
@@ -417,7 +461,7 @@ export default {
       this.contentNode.innerHTML = content;
       this.placeOverlay.setPosition(new kakao.maps.LatLng(place.y, place.x));
       this.placeOverlay.setMap(this.map);
-      console.log(content);
+      //console.log(content);
       this.infowindow.push(
         new kakao.maps.InfoWindow({
           map: this.map, // 인포윈도우가 표시될 지도
@@ -435,19 +479,20 @@ export default {
       );
       // [qa, qa, qa]
       // qa {La: 126.989525786594, Ma: 37.5951865180577}
-      console.log("makeLatLng에서 만들어진 positions");
-      console.log(positions);
+      // alert("makeLatLng에서 만들어진 positions " + positions.length);
+      //console.log(positions);
       // 마커의 위치들을 포지션 배열 안에 넣어준다.
       this.SET_POSITIONS(positions);
-      console.log("SET_MARKERS결과  positions");
-      console.log(positions);
+      //console.log("SET_MARKERS결과  positions");
+      //console.log(positions);
 
       // 가운데 위치 찾기
-      console.log(
-        "#####################바운드를 찾는 포지션 함수형태#########################################################"
-      );
-      console.log(positions);
+      //console.log(
+      // "#####################바운드를 찾는 포지션 함수형태#########################################################"
+      // );
+      //console.log(positions);
       // (10)[{…},{…},{…},{…},{…},{…},{…},{…},{…},{…},__ob__:Observer]
+
       const bounds = positions.reduce(
         (bounds, latlng) => bounds.extend(latlng),
         new kakao.maps.LatLngBounds()
@@ -462,7 +507,7 @@ export default {
       // 액션에 넣어준다?
       if (this.positions.length > 0) {
         // this.setMarkers(positions);
-        console.log("스토어의 마커스 안에 positions를 넣어준다.");
+        //console.log("스토어의 마커스 안에 positions를 넣어준다.");
         this.markers = this.positions.map(
           (position) =>
             new kakao.maps.Marker({
@@ -473,11 +518,20 @@ export default {
         this.map.setBounds(this.bounds);
       }
     },
-    removeMarkers() {
+    // 아파트 마커들 삭제
+    removeMarkers(aptMarkerStatus = true) {
+      // 우선 뿌려진 전체 아파트 배열들을 삭제해준다.
       for (var i = 0; i < this.markers.length; i++) {
         this.markers[i].setMap(null);
       }
-      this.markers = [];
+      // 그 후 만약 aptMarkerStatus로 null값이 들어온다면 아파트배열과 아파트마커도 초기화해준다.
+      if (!aptMarkerStatus) {
+        this.markers = [];
+        if (this.aptMarker) {
+          this.aptMarker.setMap(null);
+        }
+        this.aptMarker = aptMarkerStatus;
+      }
     },
   },
 };
