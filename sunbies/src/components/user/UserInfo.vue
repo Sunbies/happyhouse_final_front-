@@ -2,9 +2,9 @@
   <b-container class="bv-example-row mt-3">
     <b-row>
       <b-col>
-        <b-alert variant="secondary" show
-          ><h3>{{ title[changable ? 1 : 0] }}</h3></b-alert
-        >
+        <div>
+          <h2>{{ title[changable ? 1 : 0] }}</h2>
+        </div>
       </b-col>
     </b-row>
     <b-col></b-col>

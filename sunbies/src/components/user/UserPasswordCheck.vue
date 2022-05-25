@@ -2,12 +2,12 @@
   <b-container class="bv-example-row mt-3">
     <b-row>
       <b-col>
-        <b-alert variant="secondary" show><h3>내정보</h3></b-alert>
+        <div><h2>내정보</h2></div>
       </b-col>
     </b-row>
     <b-container>
       <b-col class="d-flex justify-content-center">
-        <b-card style="width: 40rem; background-color: #e2e3e5">
+        <b-card style="width: 40rem">
           <b-form class="text-left" @submit.stop.prevent="passwordCheck">
             <b-form-group label="비밀번호:" label-for="비밀번호">
               <!-- 위 label-for와 아래 name, validateState안 변수명, b-form-invalid-feedback은 같아야하는걸로 보인다. -->

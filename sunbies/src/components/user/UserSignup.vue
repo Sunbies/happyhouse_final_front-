@@ -2,7 +2,7 @@
   <b-container class="bv-example-row mt-3">
     <b-row>
       <b-col>
-        <b-alert variant="secondary" show><h3>회원가입</h3></b-alert>
+        <div><h2>회원가입</h2></div>
       </b-col>
     </b-row>
     <b-col></b-col>
