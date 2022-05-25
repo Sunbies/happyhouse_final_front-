@@ -1,13 +1,10 @@
 <template>
-  <nav
-    class="navbar navbar-expand-sm navbar-light"
-    style="background-color: #e0e0e0"
-  >
+  <b-navbar fixed="top" class="main-nav app-bg-2">
     <!-- Brand/logo -->
     <router-link :to="{ name: 'home' }" class="navbar-brand ml-2">
       <img
         style="height: 50px; image-rendering: crisp-edges"
-        src="@/assets/logo/sunbies_small_god.png"
+        src="@/assets/logo/sunbies_small_b.png"
         alt="Sunbies"
       />
     </router-link>
@@ -46,8 +43,8 @@
         > -->
         <a class="px-2" v-b-toggle href="#sidebar-right" @click.prevent>
           <img
-            style="margin-right: 10px; height: 40px"
-            src="@/assets/menu.png"
+            style="margin-right: 10px; height: 20px"
+            src="@/assets/ui/menu-icon.svg"
             alt="Happy House"
           />
 
@@ -85,7 +82,7 @@
         </b-dropdown> -->
       </div>
     </div>
-  </nav>
+  </b-navbar>
 </template>
 
 <script>
@@ -94,4 +91,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.main-nav {
+  backdrop-filter: blur(20px);
+}
+</style>

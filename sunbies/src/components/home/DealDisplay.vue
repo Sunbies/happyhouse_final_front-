@@ -1,5 +1,5 @@
 <template>
-  <div class="pb-5">
+  <div class="outer">
     <b-container class="pb-3">
       <h3>실거래가 정보 조회</h3>
     </b-container>
@@ -66,5 +66,8 @@ export default {
 }
 h4 {
   font-size: 10;
+}
+.outer {
+  padding-bottom: 100px;
 }
 </style>

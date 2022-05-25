@@ -1,8 +1,8 @@
 <template>
   <div>
     <home-jumbotron-vue />
-    <b-container fluid class="pt-5 bg-light">
-      <b-container class="mt-3 pt-3">
+    <b-container fluid class="pt-5 app-bg-5">
+      <b-container class="home-content">
         <deal-display-vue />
         <community-display-vue />
       </b-container>
@@ -23,3 +23,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.home-content {
+  padding-top: 100px;
+  padding-bottom: 100px;
+}
+</style>

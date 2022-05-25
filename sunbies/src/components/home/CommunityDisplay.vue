@@ -1,5 +1,5 @@
 <template>
-  <div class="pb-5">
+  <div class="outer">
     <b-container class="pb-3">
       <h3>커뮤니티</h3>
     </b-container>
@@ -37,3 +37,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.outer {
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+</style>

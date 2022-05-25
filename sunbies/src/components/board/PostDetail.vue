@@ -1,6 +1,7 @@
 <template>
-  <div class="pt-5">
-    <h1 class="display-4 mt-5 py-5">{{ postDetail.title }}</h1>
+  <div>
+    <div class="placeholder"></div>
+    <h1 class="display-4 py-5">{{ postDetail.title }}</h1>
 
     <b-row class="justify-content-between">
       <div>
@@ -22,7 +23,7 @@
     <div class="py-5">
       <div
         @click.prevent="setPositionToLike"
-        class="d-inline-block p-2 text-center rounded-circle bg-light"
+        class="d-inline-block p-2 text-center rounded-circle app-bg-5"
         style="width: 40px; height: 40px; cursor: pointer"
       >
         <b-icon v-if="userLike" icon="hand-thumbs-up-fill" />
@@ -33,7 +34,7 @@
       </div>
       <div
         @click.prevent="setPositionToDislike"
-        class="d-inline-block p-2 text-center rounded-circle bg-light"
+        class="d-inline-block p-2 text-center rounded-circle app-bg-5"
         style="width: 40px; height: 40px; cursor: pointer"
       >
         <b-icon v-if="userDislike" icon="hand-thumbs-down-fill" />
@@ -44,18 +45,20 @@
       </div>
       <div
         @click.prevent="copyToClipboard"
-        class="d-inline-block p-2 text-center rounded-circle bg-light"
+        class="d-inline-block p-2 text-center rounded-circle app-bg-5"
         style="width: 40px; height: 40px; cursor: pointer"
       >
         <b-icon icon="share-fill" />
       </div>
     </div>
 
-    <post-detail-reply
-      :replylist="postDetail.replyList"
-      :postno="postDetail.postno"
-      @refreshpost="refreshPostDetail"
-    />
+    <div class="pb-5 app-bg-5">
+      <post-detail-reply
+        :replylist="postDetail.replyList"
+        :postno="postDetail.postno"
+        @refreshpost="refreshPostDetail"
+      />
+    </div>
   </div>
 </template>
 

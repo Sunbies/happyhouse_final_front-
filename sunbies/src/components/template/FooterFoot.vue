@@ -1,5 +1,5 @@
 <template>
-  <b-container fluid class="footer bg-dark">
+  <b-container fluid class="footer app-bg-1">
     <b-container class="p-5">
       <footer>
         <b-row align-h="center" class="p-5">

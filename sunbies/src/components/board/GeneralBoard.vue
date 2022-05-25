@@ -1,7 +1,8 @@
 <template>
   <div>
-    <h1 class="mt-5 pt-5">{{ boardTitle }}</h1>
-    <h6 class="">{{ boardDesc }}</h6>
+    <div class="placeholder-sm"></div>
+    <h1 class="mt-5 pt-5 pb-2">{{ boardTitle }}</h1>
+    <h6 class="pb-3">{{ boardDesc }}</h6>
     <b-row v-if="userLevel >= boardLevel" class="justify-content-end m-3">
       <div>
         <b-button
@@ -15,7 +16,7 @@
         >
       </div>
     </b-row>
-    <div class="bg-light">
+    <div class="app-bg-5">
       <b-row class="p-3">
         <b-col cols="2">
           <b-form-select v-model="orderBySelected" :options="orderByOptions">
@@ -49,9 +50,11 @@
         </b-col>
       </b-row>
 
-      <board-post-list :postlist="postList" :key="$route.path" />
+      <div class="board-post-list">
+        <board-post-list :postlist="postList" :key="$route.path" />
+      </div>
 
-      <b-row class="justify-content-center">
+      <b-row class="board-page-nav justify-content-center">
         <board-page-nav
           :pagenav="pageNav"
           :boardname="boardName"
@@ -170,3 +173,13 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.board-post-list {
+  padding: 50px;
+}
+
+.board-page-nav {
+  padding: 50px 0 100px 0;
+}
+</style>

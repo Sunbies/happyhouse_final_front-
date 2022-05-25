@@ -8,12 +8,11 @@
       backdrop
       backdrop-variant="transparent"
       no-header
-      bg-variant="secondary"
       shadow
     >
-      <div style="background-color: #f6f6f6">
+      <div>
         <a
-          class="float-right px-3 py-2"
+          class="float-right px-3 py-2 m-2"
           v-b-toggle
           href="#sidebar-right"
           @click.prevent
@@ -24,17 +23,17 @@
             variant="dark"
           ></b-icon-x-square>
         </a>
-        <b-navbar>
+        <b-navbar class="pt-3">
           <h5 v-if="userInfo == null">
             <img
-              style="margin-right: 10px; height: 40px"
+              style="margin-right: 10px; height: 30px"
               src="@/assets/user.svg"
               alt="Happy House"
             />손님
           </h5>
           <h5 v-else>
             <img
-              style="margin-right: 10px; height: 40px"
+              style="margin-right: 10px; height: 30px"
               src="@/assets/user.svg"
               alt="Happy House"
             />{{ userInfo.id }}
@@ -45,91 +44,85 @@
       <div>
         <!-- <a>asdfsdf</a> -->
         <div class="accordion" role="tablist">
-          <b-card no-body class="mb-1">
-            <b-card-header header-tag="header" class="p-1" role="tab">
-              <b-button block v-b-toggle.mypage-collapse variant="info"
-                >마이페이지</b-button
-              >
-            </b-card-header>
+          <div>
+            <!-- <b-card-header header-tag="header" class="p-1" role="tab"> -->
+            <!-- <b-button block v-b-toggle.mypage-collapse>마이페이지</b-button> -->
+            <div
+              v-b-toggle.mypage-collapse
+              class="menu-toggle-button menu-toggle-button-first"
+            >
+              마이페이지
+            </div>
+            <!-- </b-card-header> -->
             <b-collapse
               id="mypage-collapse"
               accordion="sidebar-accordion"
               role="tabpanel"
               visible
             >
-              <b-card-body
-                v-if="!isLogin"
-                class="mx-auto"
-                style="padding: 0%; width: 78%"
-              >
-                <b-card no-body>
-                  <b-button :to="{ name: 'login' }" block variant="info"
-                    >로그인</b-button
+              <div v-if="!isLogin">
+                <div>
+                  <router-link
+                    tag="div"
+                    :to="{ name: 'login' }"
+                    class="menu-item"
+                    >로그인</router-link
                   >
-                </b-card>
-              </b-card-body>
-              <b-card-body
-                v-if="isLogin"
-                class="mx-auto"
-                style="padding: 0%; width: 78%"
-              >
-                <b-card no-body>
-                  <b-button @click.prevent="onClickLogout" block variant="info"
-                    >로그아웃</b-button
+                </div>
+              </div>
+              <div v-if="isLogin">
+                <div>
+                  <div @click.prevent="onClickLogout" class="menu-item">
+                    로그아웃
+                  </div>
+                </div>
+              </div>
+              <div v-if="!isLogin">
+                <div>
+                  <router-link
+                    class="menu-item"
+                    tag="div"
+                    :to="{ name: 'signup' }"
+                    >회원가입</router-link
                   >
-                </b-card>
-              </b-card-body>
-              <b-card-body
-                v-if="!isLogin"
-                class="mx-auto"
-                style="padding: 0%; width: 78%"
-              >
-                <b-card no-body>
-                  <b-button :to="{ name: 'signup' }" block variant="info"
-                    >회원가입</b-button
+                </div>
+              </div>
+              <div v-if="!isLogin">
+                <div>
+                  <router-link class="menu-item" tag="div" :to="{ name: '' }"
+                    >비밀번호 찾기</router-link
                   >
-                </b-card>
-              </b-card-body>
-              <b-card-body
-                v-if="!isLogin"
-                class="mx-auto"
-                style="padding: 0%; width: 78%"
-              >
-                <b-card no-body>
-                  <b-button block variant="info">비밀번호 찾기</b-button>
-                </b-card>
-              </b-card-body>
-              <b-card-body
-                v-if="isLogin"
-                class="mx-auto"
-                style="padding: 0%; width: 78%"
-              >
-                <b-card no-body>
-                  <b-button
+                </div>
+              </div>
+              <div v-if="isLogin">
+                <div>
+                  <router-link
+                    tag="div"
                     :to="{ name: 'userPasswordCheck' }"
-                    block
-                    variant="info"
-                    >회원정보</b-button
+                    class="menu-item"
+                    >회원정보</router-link
                   >
-                </b-card>
-              </b-card-body>
+                </div>
+              </div>
             </b-collapse>
-          </b-card>
+          </div>
 
-          <b-card no-body class="mb-1">
-            <b-card-header header-tag="header" class="p-1" role="tab">
-              <b-button block v-b-toggle.commynity-collapse variant="info"
-                >커뮤니티</b-button
-              >
-            </b-card-header>
+          <div>
+            <!-- <b-card-header header-tag="header" class="p-1" role="tab"> -->
+            <div v-b-toggle.commynity-collapse class="menu-toggle-button">
+              커뮤니티
+            </div>
+            <!-- </b-card-header> -->
             <b-collapse
               id="commynity-collapse"
               accordion="sidebar-accordion"
               role="tabpanel"
             >
-              <b-card-body class="mx-auto" style="padding: 0%; width: 78%">
-                <b-card no-body>
-                  <b-button
+              <div>
+                <div>
+                  <router-link
+                    tag="div"
+                    class="menu-item"
                     :to="{
                       name: 'generalboard',
                       params: {
@@ -140,15 +133,15 @@
                         cpp: 10,
                       },
                     }"
-                    block
-                    variant="info"
-                    >공지사항</b-button
+                    >공지사항</router-link
                   >
-                </b-card>
-              </b-card-body>
-              <b-card-body class="mx-auto" style="padding: 0%; width: 78%">
-                <b-card no-body>
-                  <b-button
+                </div>
+              </div>
+              <div>
+                <div>
+                  <router-link
+                    tag="div"
+                    class="menu-item"
                     :to="{
                       name: 'generalboard',
                       params: {
@@ -159,15 +152,15 @@
                         cpp: 10,
                       },
                     }"
-                    block
-                    variant="info"
-                    >Q&amp;A 게시판</b-button
+                    >Q&amp;A 게시판</router-link
                   >
-                </b-card>
-              </b-card-body>
-              <b-card-body class="mx-auto" style="padding: 0%; width: 78%">
-                <b-card no-body>
-                  <b-button
+                </div>
+              </div>
+              <div>
+                <div>
+                  <router-link
+                    tag="div"
+                    class="menu-item"
                     :to="{
                       name: 'generalboard',
                       params: {
@@ -178,46 +171,46 @@
                         cpp: 10,
                       },
                     }"
-                    block
-                    variant="info"
-                    >부동산 게시판</b-button
+                    >부동산 게시판</router-link
                   >
-                </b-card>
-              </b-card-body>
+                </div>
+              </div>
             </b-collapse>
-          </b-card>
+          </div>
 
-          <b-card no-body class="mb-1">
-            <b-card-header header-tag="header" class="p-1" role="tab">
-              <b-button block v-b-toggle.deal-collapse variant="info"
-                >실거래가 조회</b-button
-              >
-            </b-card-header>
+          <div>
+            <!-- <b-card-header header-tag="header" class="p-1" role="tab"> -->
+            <div v-b-toggle.deal-collapse class="menu-toggle-button">
+              실거래가 조회
+            </div>
+            <!-- </b-card-header> -->
             <b-collapse
               id="deal-collapse"
               accordion="sidebar-accordion"
               role="tabpanel"
             >
-              <b-card-body class="mx-auto" style="padding: 0%; width: 78%">
-                <b-card no-body>
-                  <b-button :to="{ name: 'searchDeal' }" block variant="info"
-                    >실거래가 조회</b-button
+              <div>
+                <div>
+                  <router-link
+                    class="menu-item"
+                    tag="div"
+                    :to="{ name: 'searchDeal' }"
+                    >실거래가 조회</router-link
                   >
-                </b-card>
-              </b-card-body>
-              <b-card-body
-                v-if="userInfo"
-                class="mx-auto"
-                style="padding: 0%; width: 78%"
-              >
-                <b-card no-body>
-                  <b-button :to="{ name: 'favorite' }" block variant="info"
-                    >즐겨찾기</b-button
+                </div>
+              </div>
+              <div v-if="userInfo">
+                <div>
+                  <router-link
+                    class="menu-item"
+                    tag="div"
+                    :to="{ name: 'favorite' }"
+                    >즐겨찾기</router-link
                   >
-                </b-card>
-              </b-card-body>
+                </div>
+              </div>
             </b-collapse>
-          </b-card>
+          </div>
         </div>
       </div>
     </b-sidebar>
@@ -257,7 +250,25 @@ export default {
 <style>
 .b-sidebar.b-sidebar-right {
   left: auto;
-  top: 86px;
+  top: 76px;
   right: 0;
+}
+
+.menu-toggle-button {
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.menu-toggle-button-first {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.menu-item {
+  cursor: pointer;
+  text-align: center;
+  padding: 0.5rem;
+  background-color: rgba(186, 199, 219, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
 }
 </style>

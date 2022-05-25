@@ -1,6 +1,7 @@
 <template>
-  <div style="background-color: white">
-    <div>
+  <div>
+    <div class="placeholder-sm"></div>
+    <div class="pb-5">
       <search-deal-vue></search-deal-vue>
       <kakao-map-vue></kakao-map-vue>
     </div>

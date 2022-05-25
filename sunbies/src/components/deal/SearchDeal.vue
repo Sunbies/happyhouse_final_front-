@@ -1,8 +1,9 @@
 <template>
-  <div style="background-color: red">
-    <h3 class="underline-steelblue">
-      <b-icon icon="house-door-fill" variant="black"></b-icon> 실거래가 정보찾기
-    </h3>
+  <div class="pb-5">
+    <h1 class="pb-4">
+      <!-- <b-icon icon="house-door-fill" variant="black"></b-icon> -->
+      실거래가 정보찾기
+    </h1>
     <!-- 여기에 검색란 만들어야함 -->
     <!-- <b-row class="mt-4 mb-4 text-center"> -->
     <b-row align-h="center" class="p-3">

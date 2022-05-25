@@ -1,5 +1,5 @@
 <template>
-  <b-container class="bg-light p-5">
+  <b-container class="p-5">
     <div class="pt-3">
       <post-detail-reply-list-item
         v-for="(replyitem, index) in replylist"

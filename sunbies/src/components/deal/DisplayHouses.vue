@@ -1,22 +1,26 @@
 <template>
-  <b-container>
+  <b-container class="outer">
     <b-row id="deal-sel">
       <!-- 왼쪽 -->
       <b-col class="dealCont-header">
         <h3>거래정보</h3>
-        <div id="dealCont-list" style="height: 550px; overflow: scroll">
+        <div id="dealCont-list" style="height: 550px; overflow: auto">
           <!-- 여기에 아파트 정보 뿌리기 -->
           <!-- 이거를 클릭 가능한 이쁜애들로 만들어보자 -->
           <!-- 버튼으로 만들어볼까? -->
-          <b-button
+          <div v-if="!houses" class="py-5 text-greyed">
+            시/군/구를 선택하세요.
+          </div>
+          <div
             v-for="(house, idx) in houses"
             :key="idx"
             block
             @click="setHouse(house)"
-            style="background-color: grey; text-align: left"
+            variant="transparent"
+            class="deal-list-item"
           >
             <div>
-              <h5>{{ house.apartmentName }}</h5>
+              <h4 style="font-weight: bold">{{ house.apartmentName }}</h4>
               <div>
                 {{
                   "주소: " +
@@ -49,47 +53,35 @@
                 {{ "거래금액: " + house.dealAmount + "만원" }}
               </div>
             </div>
-          </b-button>
+          </div>
         </div>
 
         <!-- 페이징 컴포넌트 -->
-        <div v-if="currentPageNo" class="d-flex justify-content-center">
+        <div v-if="houses" class="d-flex justify-content-center py-3">
           <deal-page-nav />
         </div>
         <!-- 상권정보 뿌리기 -->
-        <div v-if="categoryStatus == true" id="상권정보">
-          <b-button
+        <div class="info-list" v-if="categoryStatus == true" id="상권정보">
+          <div
+            class="info-item-container"
             id="cafeDisplay"
             @click.prevent="firstCategoryMarker(category)"
             v-for="(category, idx) in categoryList"
             :key="idx"
-            style="maxwid"
           >
-            <b-card
-              style="
-                background-color: #7f7f7f;
-                outline-style: solid;
-                outline-color: white;
-                outline-width: 1px;
-                width: 7em;
-              "
-            >
-              <b-card-img
-                v-bind:id="idx"
-                :src="require(`@/assets/${idx}.png`)"
-                alt="cafe"
-                top
-                style="
-                  max-width: 5em;
-                  background-color: #ffffff;
-                  border-radius: 15px;
-                "
-              ></b-card-img>
-              <b-card-text style="color: white; padding-top: 20px">
+            <div class="info-item">
+              <div class="info-item-icon-wrapper">
+                <img
+                  class="info-item-icon"
+                  :id="idx"
+                  :src="require(`@/assets/${idx}.png`)"
+                />
+              </div>
+              <div class="info-item-count">
                 {{ category.length }}
-              </b-card-text>
-            </b-card>
-          </b-button>
+              </div>
+            </div>
+          </div>
         </div>
       </b-col>
       <!-- 여기에 디테일 뷰 보여야함 -->
@@ -97,6 +89,9 @@
         <h3>거래 상세 정보</h3>
         <div>
           <!-- 카드로 해야한다. -->
+          <div v-if="!house" class="py-5 text-greyed">
+            거래 항목을 선택하세요.
+          </div>
           <b-card v-if="house" tag="article" style="height: 100%" class="mb-2">
             <b-aspect
               aspect="16:9"
@@ -106,7 +101,7 @@
               )});`"
             ></b-aspect>
             <b-card-text>
-              <h4>아파트 상세정보</h4>
+              <h4 class="pt-4">아파트 상세정보</h4>
 
               <div class="text-right">
                 <b-button
@@ -120,26 +115,39 @@
                 </b-button>
               </div>
 
-              <b-row>
-                <b-col>
-                  <b-alert show variant="dark"
-                    >아파트 이름 : {{ house.apartmentName }}
-                  </b-alert>
+              <b-row align-v="stretch">
+                <b-col cols="3">
+                  <div class="house-detail house-detail-first house-detail-key">
+                    아파트 이름
+                  </div>
+                </b-col>
+                <b-col cols="9">
+                  <div
+                    class="house-detail house-detail-first house-detail-value"
+                  >
+                    {{ house.apartmentName }}
+                  </div>
                 </b-col>
               </b-row>
-              <b-row>
-                <b-col>
-                  <b-alert show variant="secondary"
-                    >준공년도 : {{ house.buildYear }}년
-                  </b-alert>
+
+              <b-row align-v="stretch">
+                <b-col cols="3">
+                  <div class="house-detail house-detail-key">준공 연도</div>
+                </b-col>
+                <b-col cols="9">
+                  <div class="house-detail house-detail-value">
+                    {{ house.buildYear }}년
+                  </div>
                 </b-col>
               </b-row>
-              <b-row>
-                <b-col>
-                  <b-alert show variant="dark"
-                    >주소 :
+
+              <b-row align-v="stretch">
+                <b-col cols="3">
+                  <div class="house-detail house-detail-key">주소</div>
+                </b-col>
+                <b-col cols="9">
+                  <div class="house-detail house-detail-value">
                     {{
-                      "주소: " +
                       house.sidoName +
                       " " +
                       house.gugunName +
@@ -155,36 +163,55 @@
                       " " +
                       house.roadName
                     }})
-                  </b-alert>
+                  </div>
                 </b-col>
               </b-row>
-              <h4>거래정보</h4>
 
-              <b-row>
-                <b-col>
-                  <b-alert show variant="secondary"
-                    >거래번호 : {{ house.no }}
-                  </b-alert>
+              <h4 class="mt-5 py-5">거래정보</h4>
+
+              <b-row align-v="stretch">
+                <b-col cols="3">
+                  <div class="house-detail house-detail-first house-detail-key">
+                    거래 번호
+                  </div>
                 </b-col>
-              </b-row>
-              <b-row>
-                <b-col>
-                  <b-alert show variant="dark"
-                    >층수 : {{ house.floor }}층</b-alert
+                <b-col cols="9">
+                  <div
+                    class="house-detail house-detail-first house-detail-value"
                   >
+                    {{ house.no }}
+                  </div>
                 </b-col>
               </b-row>
-              <b-row>
-                <b-col>
-                  <b-alert show variant="secondary"
-                    >면적 : {{ house.area }}㎡</b-alert
-                  >
+
+              <b-row align-v="stretch">
+                <b-col cols="3">
+                  <div class="house-detail house-detail-key">층수</div>
+                </b-col>
+                <b-col cols="9">
+                  <div class="house-detail house-detail-value">
+                    {{ house.floor }}층
+                  </div>
                 </b-col>
               </b-row>
-              <b-row>
-                <b-col>
-                  <b-alert show variant="dark"
-                    >거래일시 :
+
+              <b-row align-v="stretch">
+                <b-col cols="3">
+                  <div class="house-detail house-detail-key">면적</div>
+                </b-col>
+                <b-col cols="9">
+                  <div class="house-detail house-detail-value">
+                    {{ house.area }}㎡
+                  </div>
+                </b-col>
+              </b-row>
+
+              <b-row align-v="stretch">
+                <b-col cols="3">
+                  <div class="house-detail house-detail-key">거래 일시</div>
+                </b-col>
+                <b-col cols="9">
+                  <div class="house-detail house-detail-value">
                     {{
                       house.dealYear +
                       "년 " +
@@ -192,15 +219,19 @@
                       "월 " +
                       house.dealDay +
                       "일"
-                    }}</b-alert
-                  >
+                    }}
+                  </div>
                 </b-col>
               </b-row>
-              <b-row>
-                <b-col>
-                  <b-alert show variant="secondary"
-                    >거래금액 : {{ house.dealAmount }}원</b-alert
-                  >
+
+              <b-row align-v="stretch">
+                <b-col cols="3">
+                  <div class="house-detail house-detail-key">거래 금액</div>
+                </b-col>
+                <b-col cols="9">
+                  <div class="house-detail house-detail-value">
+                    {{ house.dealAmount }}만원
+                  </div>
                 </b-col>
               </b-row>
             </b-card-text>
@@ -375,6 +406,10 @@ export default {
 </script>
 
 <style scoped>
+.outer {
+  padding-bottom: 200px;
+}
+
 .mouse-over-bgcolor {
   background-color: lightblue;
 }
@@ -383,5 +418,73 @@ export default {
   width: 100%;
   background-size: cover;
   background-position: center;
+  border-radius: 0.2rem;
+}
+
+.deal-list-item {
+  background-color: rgba(211, 227, 252, 0.5);
+  padding: 2rem;
+  margin-bottom: 3px;
+  text-align: left;
+  cursor: pointer;
+  border: 3px solid rgb(255, 255, 255, 0.5);
+}
+
+.deal-list-item:hover {
+  background-color: rgb(119, 166, 247);
+  color: #fff;
+}
+
+.text-greyed {
+  color: rgba(40, 45, 66, 0.7);
+}
+
+.info-list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.info-item-container {
+  cursor: pointer;
+  padding: 1rem 1rem 0.5rem 1rem;
+  margin: 0.5rem;
+  border-radius: 0.4rem;
+  background-color: rgba(42, 70, 65, 0.3);
+}
+.info-item-container:hover {
+  background-color: rgba(37, 59, 56, 0.4);
+}
+
+.info-item-icon-wrapper {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 100%;
+  padding: 1rem;
+}
+.info-item-icon {
+  width: 50px;
+}
+
+.info-item-count {
+  padding-top: 0.5rem;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.house-detail {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  text-align: left;
+  padding: 1rem 0 1rem 0.5rem;
+  margin: 0 0.3rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.house-detail-key {
+  font-weight: bold;
+}
+.house-detail-first {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 </style>
