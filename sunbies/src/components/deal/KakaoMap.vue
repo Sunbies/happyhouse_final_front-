@@ -61,6 +61,7 @@ export default {
     houses: function () {
       // alert("아파트 리스트 생성, 개수는 " + this.houses.length + "개");
       let positions = [];
+      // alert(this.houses.length);
       //console.log(positions);
       this.houses.forEach(function (house) {
         //console.log(house.lat + " " + house.lng);
@@ -77,7 +78,8 @@ export default {
           positions.push(position);
         }
       });
-      //console.log("positions의 사이즈 = " + positions.length);
+      // alert("positions의 사이즈 = " + positions.length);
+
       if (positions.length == 0) {
         alert("해당하는 데이터가 없습니다.");
       } else {
@@ -420,7 +422,7 @@ export default {
     },
 
     displayPlaceInfo(place) {
-      alert("displayPlaceInfo 들어왔음");
+      // alert("displayPlaceInfo 들어왔음");
       var content =
         '<div class="placeinfo">' +
         '   <a class="title" href="' +
@@ -477,7 +479,7 @@ export default {
       );
       // [qa, qa, qa]
       // qa {La: 126.989525786594, Ma: 37.5951865180577}
-      //console.log("makeLatLng에서 만들어진 positions");
+      // alert("makeLatLng에서 만들어진 positions " + positions.length);
       //console.log(positions);
       // 마커의 위치들을 포지션 배열 안에 넣어준다.
       this.SET_POSITIONS(positions);
@@ -490,7 +492,7 @@ export default {
       // );
       //console.log(positions);
       // (10)[{…},{…},{…},{…},{…},{…},{…},{…},{…},{…},__ob__:Observer]
-      positions.push(this.aptBounds);
+
       const bounds = positions.reduce(
         (bounds, latlng) => bounds.extend(latlng),
         new kakao.maps.LatLngBounds()
