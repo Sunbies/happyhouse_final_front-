@@ -65,15 +65,21 @@ export default {
       return null;
     },
     // api check유저로 확인하기
-    passwordCheck() {
-      const userPassword = this.$store.state.memberStore.userInfo.password;
-      if (userPassword == this.password) {
-        alert("비밀번호 일치");
-        this.$router.push({ name: "userinfo" });
-      } else {
-        alert("비밀번호가 틀렸습니다.");
-        this.password = "";
-      }
+    async passwordCheck() {
+      await this.$validator.validateAll().then((result) => {
+        if (!result) {
+          // alert("수정불가");
+          return;
+        }
+        const userPassword = this.$store.state.memberStore.userInfo.password;
+        if (userPassword == this.password) {
+          // alert("비밀번호 일치");
+          this.$router.push({ name: "userinfo" });
+        } else {
+          alert("비밀번호가 틀렸습니다.");
+          this.password = "";
+        }
+      });
     },
   },
 };

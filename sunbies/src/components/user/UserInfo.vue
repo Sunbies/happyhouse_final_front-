@@ -68,7 +68,6 @@
     </b-container>
     <!--================================ 유저 정보 수정 ================================-->
     <b-container v-else>
-      <!-- <a>유효성 검사는 됐는데 실패시에도 서밋하는문제있음</a> -->
       <b-col class="d-flex justify-content-center">
         <b-card class="text-center mt-3" style="width: 40rem" align="left">
           <b-form class="text-left" @submit.stop.prevent="confirm">
@@ -131,7 +130,7 @@
                 id="userName"
                 name="이름"
                 v-model="user.name"
-                v-validate="'required'"
+                v-validate="'nameStyleRule'"
                 :state="validateState('이름')"
                 aria-describedby="이름-invalid-feedback"
                 required
@@ -146,7 +145,7 @@
                 id="userPhoneNumber"
                 name="전화번호"
                 v-model="user.phone"
-                v-validate="'phoneStyleRule'"
+                v-validate="{ required, phoneStyleRule }"
                 :state="validateState('전화번호')"
                 aria-describedby="전화번호-invalid-feedback"
                 required
@@ -210,7 +209,7 @@ export default {
     });
 
     // 이름을 위해 한글 또는 영어로 입력됐는지 확인하는 유효성검사
-    Validator.extendI("nameStyleRule", {
+    Validator.extend("nameStyleRule", {
       getMessage: function (field, args) {
         console.log("field=" + field + ", args=" + args);
         return "이름은 한글 또는 영문으로 입력되어야 합니다.";
@@ -236,12 +235,12 @@ export default {
   //     ...mapActions('module1', [ 'method1', 'method2' ]),
   //     ...mapActions('module2', { mod2method1: 'method1', mod2method2: 'method2' })
   // }
-  computed() {},
 
   methods: {
     ...mapGetters(memberStore, ["checkUserInfo"]),
     ...mapActions(memberStore, ["userInfoUpdate"]),
     validateState(ref) {
+      console.log(this.veeFields);
       if (
         this.veeFields[ref] &&
         (this.veeFields[ref].dirty || this.veeFields[ref].validated)
@@ -255,27 +254,22 @@ export default {
       console.log(this.changable);
     },
     async confirm() {
-      const newUser = {
-        id: this.user.id,
-        password: this.secondPassword,
-        name: this.user.name,
-        phone: this.user.phone,
-      };
-      console.log(this.errors.any());
-      await this.userInfoUpdate(newUser).then(() => {
-        alert("회원정보 수정완료");
-        this.$router.push({ name: "home" });
-        // console.log("userInfo 업데이트 요청 직후 response.data");
-        // console.log(response);
-        // console.log(response.data);
-
-        // if (response.data.message == "success") {
-        //   alert("화원정보 수정 완료");
-        //   this.$router.push({ name: "home" });
-        // } else {
-        //   alert("화원정보 수정 실패");
-        // }
-        // console.log(response);
+      await this.$validator.validateAll().then((result) => {
+        if (!result) {
+          // alert("수정불가");
+          return;
+        }
+        // alert("수정가능");
+        const newUser = {
+          id: this.user.id,
+          password: this.secondPassword,
+          name: this.user.name,
+          phone: this.user.phone,
+        };
+        this.userInfoUpdate(newUser).then(() => {
+          alert("회원정보 수정완료");
+          this.$router.push({ name: "home" });
+        });
       });
     },
     async deleteUserId() {
