@@ -13,7 +13,7 @@
         align="left"
       >
         <b-form class="text-left" @submit.stop.prevent="confirm">
-          <b-form-group label="userId:" label-for="아이디">
+          <b-form-group label="아이디:" label-for="아이디">
             <b-form-input
               id="userId"
               name="아이디"
@@ -171,7 +171,7 @@ export default {
           .then((response) => {
             if (response.data.message == "success") {
               alert("회원가입 완료했습니다.");
-              this.$router.push({ name: "home" });
+              this.$router.push({ name: "login" });
             } else {
               alert("회원가입에 실패했습니다.");
               this.resetInput();

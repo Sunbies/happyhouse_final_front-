@@ -96,7 +96,9 @@
                 style="padding: 0%; width: 78%"
               >
                 <b-card no-body>
-                  <b-button block variant="info">비밀번호 찾기</b-button>
+                  <b-button :to="{ name: 'findpassword' }" block variant="info"
+                    >비밀번호 찾기</b-button
+                  >
                 </b-card>
               </b-card-body>
               <b-card-body
