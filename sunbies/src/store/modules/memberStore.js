@@ -1,5 +1,5 @@
 import jwt_decode from "jwt-decode";
-import { login, update } from "@/api/member.js";
+import { login, update, deleteMember } from "@/api/member.js";
 import { findById } from "../../api/member";
 
 const memberStore = {
@@ -99,6 +99,10 @@ const memberStore = {
           console.log(error);
         }
       );
+    },
+
+    deleteUser(context, id) {
+      return deleteMember(id);
     },
   },
 };

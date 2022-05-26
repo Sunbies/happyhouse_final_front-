@@ -1,7 +1,7 @@
 <template>
   <div class="outer">
     <b-container class="pb-3">
-      <h3>실거래가 정보 조회</h3>
+      <h3>최근 부동산 실거래 정보</h3>
     </b-container>
     <b-container>
       <b-card-group deck>

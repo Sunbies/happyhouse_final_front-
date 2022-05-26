@@ -24,6 +24,11 @@ async function findById(userid, success, fail) {
   await api.get(`/member/info/${userid}`).then(success).catch(fail);
 }
 
+const deleteMember = (id) => {
+  api.defaults.headers["access-token"] = sessionStorage.getItem("access-token");
+  return api.delete(`/member/${id}`);
+};
+
 // function logout(success, fail)
 
-export { login, update, findById };
+export { login, update, findById, deleteMember };

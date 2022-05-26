@@ -172,7 +172,7 @@
 
 <script>
 // import http from "@/util/rest-http-common";
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 import { Validator } from "vee-validate";
 // https://vuejs-kr.github.io/vue/vee-validate/2017/04/01/using-vee-validate/
 const memberStore = "memberStore";
@@ -238,7 +238,8 @@ export default {
 
   methods: {
     ...mapGetters(memberStore, ["checkUserInfo"]),
-    ...mapActions(memberStore, ["userInfoUpdate"]),
+    ...mapActions(memberStore, ["userInfoUpdate", "deleteUser"]),
+    ...mapMutations(memberStore, ["SET_USER_INFO", "SET_IS_LOGIN"]),
     validateState(ref) {
       console.log(this.veeFields);
       if (
@@ -272,15 +273,23 @@ export default {
         });
       });
     },
-    async deleteUserId() {
-      await this.deleteUser(this.user.id).then((response) => {
-        if (response.status == 200) {
-          alert("계정 삭제 완료");
-          this.$router.push({ name: "home" });
-        } else {
-          alert("계정 삭제 실패");
-        }
-      });
+    deleteUserId() {
+      this.deleteUser(this.user.id)
+        .then((response) => {
+          if (response.data.message === "success") {
+            alert("삭제되었습니다.");
+
+            this.SET_USER_INFO(null);
+            sessionStorage.removeItem("access-token");
+            this.SET_IS_LOGIN(false);
+            this.$router.push({ name: "home" });
+          } else {
+            console.log("유저 삭제 실패", response);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 };
